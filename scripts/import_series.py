@@ -80,6 +80,11 @@ def load_csv(path, aliases):
         except ValueError as e: raise ValueError(f"Replay {rid}: invalid date: {e}")
         ours=sum(r["goals"] for r in own_data)
         theirs=sum(r["goals"] for r in op_data)
+        # ODU Game 2: six goals conceded, five credited to ODU players.
+        if rid == "d39f1bf7-1f1f-4f5e-9fd5-4d581189efca":
+            if ours != 4 or theirs != 5:
+                raise ValueError("Unexpected ODU Game 2 scoring data")
+            theirs = 6
         if ours==theirs: raise ValueError(f"Replay {rid}: tied goals; overtime/final score needs review")
         if "goals conceded" in rows[0]:
             for r in own:
@@ -143,7 +148,7 @@ def arg_parser():
     p.add_argument("--db",type=Path,default=DB_DEFAULT)
     p.add_argument("--season",default="fall-2026")
     p.add_argument("--team",required=True,choices=("orange","white","black"))
-    p.add_argument("--competition",required=True,choices=("necc","ccs","crl"))
+    p.add_argument("--competition",required=True,choices=("necc","ccs","crl","pcl"))
     p.add_argument("--opponent",required=True,help="Full opponent team name")
     p.add_argument("--title",required=True,help="Human-readable series title")
     p.add_argument("--url",required=True,help="Ballchasing group URL")
