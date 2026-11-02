@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% block title %}{{ series.title }} · SHSU RL Records{% endblock %}
+{% block content %}
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <a href="{{ url_for('home') }}">Archive</a><span>/</span>
+  <a href="{{ url_for('season_page', season_slug=series.season_slug) }}">{{ series.season_name }}</a><span>/</span>
+  <a href="{{ url_for('team_page', season_slug=series.season_slug, team_slug=series.team_slug) }}">{{ series.team_name }}</a><span>/</span>
+  <span>Series</span>
+</nav>
+
+<section class="page-hero compact-hero series-hero">
+  <div class="eyebrow"><span class="eyebrow-dot"></span> {{ series.season_name | upper }} / {{ series.competition | upper }} / SERIES RECAP</div>
+  <div class="page-hero-row">
+    <div>
+      <h1>{{ series.title }}<span class="accent">.</span></h1>
+      <p>{{ series.team_name }} vs {{ series.opponent }}{% if series.played_on %} · {{ series.played_on }}{% endif %}{% if series.round_label %} · {{ series.round_label }}{% endif %}</p>
+      <div class="series-hero-actions">
+        <span class="result-pill {{ 'win' if series.result == 'W' else 'loss' if series.result == 'L' else '' }}">
+          {{ 'SERIES WIN' if series.result == 'W' else 'SERIES LOSS' if series.result == 'L' else 'SERIES ' ~ series.result }}
+        </span>
+        {% if series.ballchasing_group_url %}
+        <a class="series-source-link" href="{{ series.ballchasing_group_url }}" target="_blank" rel="noopener noreferrer">View original Ballchasing group ↗</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="series-score" aria-label="Official game result">
+      <span>OFFICIAL GAME RECORD</span>
+      <strong>{{ series.official_games_won }}–{{ series.official_games_lost }}</strong>
+    </div>
+  </div>
+  <div class="stat-strip">
+    <div><strong>{{ team.played_wins }}–{{ team.played_losses }}</strong><span>Played game record</span></div>
+    <div><strong>{{ team.goals_for }}–{{ team.goals_against }}</strong><span>Goals · Played</span></div>
+    <div><strong>{{ team.standout_games }}</strong><span>SHSU standouts</span></div>
+    <div><strong>{{ team.games }}</strong><span>Played games</span></div>
+  </div>
+</section>
+
+{% if team.forfeit_wins or team.forfeit_losses %}
+<div class="notice series-notice">
+  Awarded forfeits: {{ team.forfeit_wins }} win(s), {{ team.forfeit_losses }} loss(es).
+  Official results include these games; player stats and played-game totals do not.
+</div>
+{% endif %}
+{% if team.incomplete_games %}
+<div class="notice series-notice">
+  Incomplete SHSU player data in game(s) {{ team.incomplete_games | join(', ') }}.
+  Team totals below exclude those games until all three SHSU appearances are available.
+</div>
+{% endif %}
+
+<section class="content-section">
+  <div class="section-heading">
+    <div><p class="eyebrow">ALL PLAYED GAMES</p><h2>SHSU team statistics</h2></div>
+    <span class="small muted">{{ team.complete_games }} complete games in totals</span>
+  </div>
+  {% if team.complete_games %}
+  <div class="metric-grid">
+    {% for label, field in [('Team Score','score'),('Goals','goals'),('Assists','assists'),('Saves','saves'),('Shots','shots'),('Demos inflicted','demos')] %}
+    <div class="metric-card">
+      <span>{{ label }}</span>
+      <strong>{{ "{:,}".format(team.totals[field]) }}</strong>
+      <small>{{ "%.2f"|format(team.averages[field]) }} per played game</small>
+    </div>
+    {% endfor %}
+    <div class="metric-card">
+      <span>Shooting percentage</span>
+      <strong>{{ "%.2f"|format(team.shooting_pct) ~ "%" if team.shooting_pct is not none else "—" }}</strong>
+      <small>Goals ÷ shots</small>
+    </div>
+    <div class="metric-card">
+      <span>Demo ratio · inflicted / taken</span>
+      <strong>{{ team.demo_ratio if team.demo_ratio is not none else "—" }}</strong>
+      <small>
+        {{ "%.2f"|format(team.averages.demos) }} inflicted/game ·
+        {% if team.averages.demos_taken is not none %}{{ "%.2f"|format(team.averages.demos_taken) }} taken/game{% else %}taken data unavailable{% endif %}
+      </small>
+    </div>
+  </div>
+  {% else %}
+  <div class="empty-state"><h3>No complete SHSU box scores yet</h3><p>This series doesn't have a full three-player game recorded.</p></div>
+  {% endif %}
+</section>
+
+<section class="content-section">
+  <div class="section-heading">
+    <div><p class="eyebrow">SERIES TOTALS</p><h2>Player performances</h2></div>
+  </div>
+  {% if player_totals %}
+  <div class="table-scroll">
+    <table class="data-table series-player-table">
+      <thead><tr>
+        <th>Player</th><th>GP</th><th>Score</th><th>G</th><th>A</th><th>S</th>
+        <th>Shots</th><th>Sh%</th><th>Demos</th><th>Standouts</th>
+      </tr></thead>
+      <tbody>
+      {% for p in player_totals %}
+        {% set stats = p.summary %}
+        <tr>
+          <td><a class="player-link" href="{{ url_for('player_profile_season', player_slug=p.slug, view_slug=series.season_slug) }}">{{ p.name }} ↗</a></td>
+          <td>{{ stats.games }}</td>
+          <td><strong>{{ "{:,}".format(stats.totals.score) }}</strong></td>
+          <td>{{ stats.totals.goals }}</td>
+          <td>{{ stats.totals.assists }}</td>
+          <td>{{ stats.totals.saves }}</td>
+          <td>{{ stats.totals.shots }}</td>
+          <td>{{ "%.2f"|format(stats.shooting_pct) ~ "%" if stats.shooting_pct is not none else "—" }}</td>
+          <td>{{ stats.totals.demos }} / {{ stats.demos_taken if stats.demos_taken is not none else "—" }} <span class="muted">inf/taken</span></td>
+          <td>{% if stats.standouts %}<span class="pill pill-orange">★ {{ stats.standouts }}</span>{% else %}<span class="muted">—</span>{% endif %}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="footnote">Shooting % = goals ÷ shots. Demo counts show inflicted / taken. Standout games are counted once even when multiple categories qualify.</p>
+  {% else %}
+  <div class="empty-state"><h3>No SHSU player appearances yet</h3><p>Import the series replay data to populate this section.</p></div>
+  {% endif %}
+</section>
+
+<section class="content-section">
+  <div class="section-heading">
+    <div><p class="eyebrow">GAME BY GAME</p><h2>Series game log</h2></div>
+    {% if series.ballchasing_group_url %}<a class="text-link" href="{{ series.ballchasing_group_url }}" target="_blank" rel="noopener noreferrer">Full replay group ↗</a>{% endif %}
+  </div>
+  <div class="series-game-stack">
+  {% for g in games %}
+    <article class="series-game-card" id="game-{{ g.game_number }}">
+      <div class="series-game-heading">
+        <div class="series-game-name">
+          <span class="result-pill {{ 'win' if g.result in ('W','FW') else 'loss' if g.result in ('L','FL') else '' }}">{{ g.result }}</span>
+          <h3>Game {{ g.game_number }}</h3>
+          {% if g.status == 'played' %}
+            <span class="series-game-score">{{ g.team_goals }}–{{ g.opponent_goals }}</span>
+          {% else %}
+            <span class="muted small">Awarded {{ 'win' if g.status=='forfeit_win' else 'loss' }} · No played stats</span>
+          {% endif %}
+        </div>
+        {% if g.replay_url %}<a class="series-replay-link" href="{{ g.replay_url }}" target="_blank" rel="noopener noreferrer">Open replay ↗</a>{% endif %}
+      </div>
+      {% if g.status == 'played' %}
+        {% if g.complete %}
+        <div class="series-game-totals">
+          <span>SHSU TEAM</span>
+          <b>{{ "{:,}".format(g.team_totals.score) }} score</b>
+          <span>{{ g.team_totals.goals }}G</span>
+          <span>{{ g.team_totals.assists }}A</span>
+          <span>{{ g.team_totals.saves }}S</span>
+          <span>{{ g.team_totals.shots }} shots</span>
+          <span>{{ g.team_totals.demos }} demos</span>
+          {% if g.team_totals.standouts %}<span class="series-standout-mark">★ {{ g.team_totals.standouts }} standout{{ 's' if g.team_totals.standouts != 1 else '' }}</span>{% endif %}
+        </div>
+        {% if not g.goals_match %}<div class="series-data-warning">⚠ Imported SHSU player goals do not match the game score. Check this replay.</div>{% endif %}
+        {% endif %}
+        {% if g.players %}
+        <div class="table-scroll">
+          <table class="data-table series-game-players">
+            <thead><tr><th>Player</th><th>Score</th><th>G</th><th>A</th><th>S</th><th>Shots</th><th>Demos inf/taken</th><th>Standouts</th></tr></thead>
+            <tbody>
+            {% for p in g.players %}
+            <tr>
+              <td><a class="player-link" href="{{ url_for('player_profile_season', player_slug=p.player_slug, view_slug=series.season_slug) }}">{{ p.display_name }} ↗</a></td>
+              <td><b>{{ p.score }}</b></td><td>{{ p.goals }}</td><td>{{ p.assists }}</td><td>{{ p.saves }}</td>
+              <td>{{ p.shots }}</td>
+              <td>{{ p.demos }} / {{ p.demos_taken if p.demos_taken is not none else "—" }}</td>
+              <td>
+                {% if p.is_standout %}
+                  <span class="pill pill-orange">★ YES</span>
+                  <div class="series-accolades">{% for a in p.accolades %}<span title="{{ a.label }}">{{ a.icon }}</span>{% endfor %}</div>
+                {% else %}<span class="muted">—</span>{% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="muted small series-empty-game">No SHSU player statistics found for this played game.</p>
+        {% endif %}
+      {% endif %}
+    </article>
+  {% else %}
+    <div class="empty-state"><h3>No games are attached to this series yet</h3></div>
+  {% endfor %}
+  </div>
+</section>
+{% endblock %}

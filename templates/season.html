@@ -43,7 +43,7 @@
         <thead><tr><th>Record</th><th>Value</th><th>Holder / Match</th></tr></thead>
         <tbody>{% for record in team_records %}
           <tr><td class="label-cell"><span class="record-icon">{{ record.icon }}</span> {{ record.label }}</td><td><b class="record-number">{{ record.value }}</b></td>
-            <td>{% for g in record.winners %}<div class="holder-line"><a href="{{ url_for('team_page', season_slug=season.slug, team_slug=g.team_slug) }}">{{ g.team_name }}</a><span class="muted">vs {{ g.opponent }} · G{{ g.game_number }}</span>{% if g.replay_url %}<a class="tiny-external" href="{{ g.replay_url }}" rel="noopener noreferrer" target="_blank" aria-label="Open replay">↗</a>{% endif %}</div>{% endfor %}</td></tr>
+            <td>{% for g in record.winners %}<div class="holder-line"><a href="{{ url_for('team_page', season_slug=season.slug, team_slug=g.team_slug) }}">{{ g.team_name }}</a><a class="muted" href="{{ url_for('series.series_page', series_id=g.series_id) }}#game-{{ g.game_number }}">vs {{ g.opponent }} · G{{ g.game_number }}</a>{% if g.replay_url %}<a class="tiny-external" href="{{ g.replay_url }}" rel="noopener noreferrer" target="_blank" aria-label="Open replay">↗</a>{% endif %}</div>{% endfor %}</td></tr>
         {% endfor %}</tbody>
       </table></div>
     {% else %}
@@ -77,7 +77,7 @@
         <thead><tr><th>Record</th><th>Value</th><th>Player / Match</th></tr></thead>
         <tbody>{% for record in individual_records %}
           <tr><td class="label-cell"><span class="record-icon">{{ record.icon }}</span> {{ record.label }}</td><td><b class="record-number">{{ "{:,}".format(record.value) }}</b></td>
-          <td>{% for g in record.winners %}<div class="holder-line"><a href="{{ url_for('player_page', season_slug=season.slug, player_slug=g.player_slug) }}">{{ g.display_name }}</a><span class="muted">vs {{ g.opponent }} · G{{ g.game_number }}</span>{% if g.replay_url %}<a class="tiny-external" href="{{ g.replay_url }}" rel="noopener noreferrer" target="_blank">↗</a>{% endif %}</div>{% endfor %}</td></tr>
+          <td>{% for g in record.winners %}<div class="holder-line"><a href="{{ url_for('player_page', season_slug=season.slug, player_slug=g.player_slug) }}">{{ g.display_name }}</a><a class="muted" href="{{ url_for('series.series_page', series_id=g.series_id) }}#game-{{ g.game_number }}">vs {{ g.opponent }} · G{{ g.game_number }}</a>{% if g.replay_url %}<a class="tiny-external" href="{{ g.replay_url }}" rel="noopener noreferrer" target="_blank">↗</a>{% endif %}</div>{% endfor %}</td></tr>
         {% endfor %}</tbody>
       </table></div>
     {% else %}
@@ -93,7 +93,7 @@
           <tr><td><a class="player-link" href="{{ url_for('player_page', season_slug=season.slug, player_slug=g.player_slug) }}">{{ g.display_name }} <span>↗</span></a></td>
           <td><b class="record-number">{{ "{:,}".format(g.score) }}</b></td>
           <td class="muted">{{ g.goals }}G · {{ g.assists }}A · {{ g.saves }}S · {{ g.shots }} shots</td>
-          <td><span>{{ g.team_name }} vs {{ g.opponent }}</span><div class="muted small">Game {{ g.game_number }} · {{ g.competition }}</div></td></tr>
+          <td><a href="{{ url_for('series.series_page', series_id=g.series_id) }}#game-{{ g.game_number }}">{{ g.team_name }} vs {{ g.opponent }}</a><div class="muted small">Game {{ g.game_number }} · {{ g.competition }}</div></td></tr>
         {% endfor %}</tbody>
       </table></div>
     {% else %}

@@ -216,6 +216,32 @@ p { color:#b5bfca }
 .season-filter-link:hover { border-color:var(--orange); color:var(--orange-strong); }
 .season-filter-link.is-active { color:#19120d; background:var(--orange); border-color:var(--orange); }
 
+/* SHSU series recap — add-on styles only; does not modify existing theme */
+.series-hero .page-hero-row {align-items:center}
+.series-hero-actions {display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:3px 0 20px}
+.series-source-link,.series-replay-link {display:inline-flex; align-items:center; color:#ffae74; font-size:12px; font-weight:800; text-decoration:none}
+.series-source-link:hover,.series-replay-link:hover {color:#ffd1ac; text-decoration:underline}
+.series-score {text-align:center; min-width:170px; border:1px solid #6b4731; border-radius:12px; padding:13px 24px; background:rgba(255,125,40,.07)}
+.series-score span {font-size:9px; font-weight:800; letter-spacing:1.1px; color:#cbb6a6; display:block}
+.series-score strong {font-size:42px; letter-spacing:-1.5px; line-height:1.15; color:#fff3e9}
+.series-notice {margin-top:17px}
+.series-game-stack {display:flex; flex-direction:column; gap:15px}
+.series-game-card {border:1px solid var(--line); border-radius:12px; background:var(--panel); overflow:hidden}
+.series-game-heading {padding:16px 20px; display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap}
+.series-game-name {display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.series-game-name h3 {margin:0; font-size:17px}
+.series-game-score {font-size:18px; color:#e9d1c1; font-weight:900}
+.series-game-totals {display:flex; align-items:center; flex-wrap:wrap; gap:12px; padding:11px 20px; border-top:1px solid var(--line); background:#1c222b; font-size:11px; color:#9caab6}
+.series-game-totals b {color:#fff0e5}
+.series-game-totals>span:first-child {font-size:9px; letter-spacing:1px; font-weight:900; color:#f5b182}
+.series-standout-mark {color:#ffb57e!important; font-weight:800}
+.series-game-players {min-width:710px}
+.series-game-players td,.series-game-players th {padding:10px 13px}
+.series-player-table {min-width:760px}
+.series-accolades {display:inline-flex; gap:5px; padding-left:6px; font-size:15px; vertical-align:middle}
+.series-data-warning {padding:9px 20px; background:#4f3020; color:#ffd4b0; font-size:12px}
+.series-empty-game {padding:0 20px 20px}
+
 @media(max-width:1100px) {
   .sidebar { width:205px; flex-basis:205px }
   .team-tiles { grid-template-columns:repeat(3,minmax(0,1fr)) }
@@ -238,6 +264,13 @@ p { color:#b5bfca }
   .stat-strip>div:nth-child(-n+2) { border-bottom:1px solid #524035 }
   .season-tag { display:none }
   .site-footer { padding:20px 18px }
+}
+@media (max-width:700px) {
+  .series-hero .page-hero-row {align-items:stretch}
+  .series-score {width:100%; text-align:left; padding:11px 15px; margin-bottom:10px}
+  .series-score strong {font-size:30px}
+  .series-game-heading {padding:13px 14px}
+  .series-game-totals {padding:10px 14px; gap:9px}
 }
 @media(max-width:460px) {
   h1 { font-size:39px }

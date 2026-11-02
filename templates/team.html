@@ -112,7 +112,7 @@
   {% if records %}
   <div class="table-scroll"><table class="data-table"><thead><tr><th>Category</th><th>Record</th><th>Match</th></tr></thead><tbody>
   {% for record in records %}<tr><td class="label-cell"><span class="record-icon">{{ record.icon }}</span> {{ record.label }}</td><td><b class="record-number">{{ "{:,}".format(record.value) }}</b></td><td>
-    {% for g in record.winners %}<div class="holder-line"><span>vs {{ g.opponent }} · G{{ g.game_number }}</span>{% if g.replay_url %}<a class="tiny-external" href="{{ g.replay_url }}" target="_blank" rel="noopener noreferrer">↗</a>{% endif %}</div>{% endfor %}
+    {% for g in record.winners %}<div class="holder-line"><a href="{{ url_for('series.series_page', series_id=g.series_id) }}#game-{{ g.game_number }}">vs {{ g.opponent }} · G{{ g.game_number }}</a>{% if g.replay_url %}<a class="tiny-external" href="{{ g.replay_url }}" target="_blank" rel="noopener noreferrer">↗</a>{% endif %}</div>{% endfor %}
   </td></tr>{% endfor %}
   </tbody></table></div>
   {% else %}<div class="empty-state"><span class="empty-icon">🏆</span><h3>No imported team records yet</h3><p>They will appear automatically after you import completed game statistics.</p></div>{% endif %}
@@ -122,7 +122,7 @@
   <div class="section-heading"><div><p class="eyebrow">MATCH HISTORY</p><h2>Series results</h2></div></div>
   {% if series_list %}
   <div class="table-scroll"><table class="data-table"><thead><tr><th>Date</th><th>Competition</th><th>Opponent</th><th>Official Result</th><th>Game record</th></tr></thead><tbody>
-  {% for s in series_list %}<tr><td>{{ s.played_on or "Date TBD" }}</td><td>{{ s.competition }}{% if s.round_label %}<div class="small muted">{{ s.round_label }}</div>{% endif %}</td><td>{{ s.opponent }}</td><td><span class="result-pill {{ 'win' if s.result == 'W' else 'loss' if s.result == 'L' else '' }}">{{ s.result }}</span></td><td>{{ s.official_games_won }}–{{ s.official_games_lost }}{% if s.ballchasing_group_url %} <a href="{{ s.ballchasing_group_url }}" target="_blank" rel="noopener noreferrer" class="tiny-external">Replay ↗</a>{% endif %}</td></tr>{% endfor %}
+  {% for s in series_list %}<tr><td>{{ s.played_on or "Date TBD" }}</td><td>{{ s.competition }}{% if s.round_label %}<div class="small muted">{{ s.round_label }}</div>{% endif %}</td><td><a href="{{ url_for('series.series_page', series_id=s.id) }}">{{ s.opponent }} ↗</a></td><td><span class="result-pill {{ 'win' if s.result == 'W' else 'loss' if s.result == 'L' else '' }}">{{ s.result }}</span></td><td>{{ s.official_games_won }}–{{ s.official_games_lost }}{% if s.ballchasing_group_url %} <a href="{{ s.ballchasing_group_url }}" target="_blank" rel="noopener noreferrer" class="tiny-external">Replay ↗</a>{% endif %}</td></tr>{% endfor %}
   </tbody></table></div>
   {% else %}<div class="empty-state"><span class="empty-icon">📅</span><h3>No series imported yet</h3><p>Series and replay links will populate when match data is loaded.</p></div>{% endif %}
 </section>

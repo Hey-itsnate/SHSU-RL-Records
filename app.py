@@ -8,10 +8,12 @@ from pathlib import Path
 from flask import Flask, abort, g, render_template, request, redirect, url_for
 
 import repository as repo
+from series_pages import series_bp
 
 ROOT = Path(__file__).resolve().parent
 app = Flask(__name__)
 app.config["DATABASE"] = Path(os.environ.get("SHSU_DB_PATH", ROOT / "shsu_records.sqlite3"))
+app.register_blueprint(series_bp)
 
 
 def db():
