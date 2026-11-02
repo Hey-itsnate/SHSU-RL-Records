@@ -112,7 +112,14 @@
           <td><a class="player-link" href="{{ url_for('player_page', season_slug=season.slug, player_slug=p.slug) }}">{{ p.display_name }} <span>↗</span></a></td>
           <td><strong>{{ p.standout_games }}</strong></td><td>{{ p.games_played }}</td>
           <td>{% if p.games_played %}<span class="rate-badge">{{ "%.2f"|format(p.standout_pct) }}%</span>{% else %}<span class="muted">—</span>{% endif %}</td>
-          <td><details class="inline-details"><summary>9 categories <span>⌄</span></summary><div class="accolade-popover">
+          <td>
+            {% set category_counter = namespace(count=0) %}
+            {% for cat in standout_types %}
+              {% if p[cat.field] | int > 0 %}
+                {% set category_counter.count = category_counter.count + 1 %}
+              {% endif %}
+            {% endfor %}
+            <details class="inline-details"><summary>{{ category_counter.count }}/{{ standout_types|length }} categories <span>⌄</span></summary><div class="accolade-popover">
           {% for cat in standout_types %}<div><span>{{ cat.icon }} {{ cat.label }}</span><strong>{{ p[cat.field] }}</strong></div>{% endfor %}
           </div></details></td></tr>
       {% endfor %}</tbody>
