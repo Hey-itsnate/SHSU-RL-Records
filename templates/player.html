@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}{{ player.display_name }} · {{ season_label }} · SHSU RL{% endblock %}
+{% block content %}
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <a href="{{ url_for('home') }}">Archive</a><span>/</span>
+  {% if season %}
+    <a href="{{ url_for('season_page', season_slug=season.slug) }}">{{ season.name }}</a><span>/</span>
+  {% endif %}
+  <span>{{ player.display_name }}</span>
+</nav>
+<section class="page-hero compact-hero">
+  <div class="eyebrow"><span class="eyebrow-dot"></span> {{ season_label | upper }} / PLAYER PROFILE</div>
+  <div class="page-hero-row"><div><h1>{{ player.display_name }}<span class="accent">.</span></h1>
+    <p>{% for team in affiliations %}
+      <a class="team-chip team-chip-{{ team.slug }}"
+         href="{{ url_for('team_page', season_slug=team.season_slug, team_slug=team.slug) }}">
+        {{ team.name }}{% if not season %} · {{ team.season_name }}{% endif %}
+      </a>
+    {% endfor %}
+    {% if not affiliations %}SHSU player{% endif %}</p></div><div class="player-hero-avatar">{{ player.display_name[0] }}</div></div>
+  <div class="stat-strip">
+    <div><strong>{{ summary.games if summary else "—" }}</strong><span>Games played</span></div>
+    <div><strong>{{ summary.standouts if summary else "—" }}</strong><span>Standout games</span></div>
+    <div><strong>{{ "%.2f"|format(summary.standout_pct) ~ "%" if summary else "—" }}</strong><span>Standout rate</span></div>
+    <div><strong>{{ summary.totals.goals if summary else "—" }}</strong><span>Total goals</span></div>
+  </div>
+</section>
+
+<section class="content-section">
+  <div class="section-heading"><div>
+    <p class="eyebrow">PLAYER HISTORY</p>
+    <h2>Season filter</h2>
+  </div></div>
+  <nav class="player-season-filter" aria-label="Filter player statistics by season">
+    {% for option in available_seasons %}
+      <a href="{{ url_for('player_profile_season', player_slug=player.slug, view_slug=option.slug) }}"
+         class="season-filter-link{% if selected_slug == option.slug %} is-active{% endif %}"
+         {% if selected_slug == option.slug %}aria-current="page"{% endif %}>
+        {{ option.name }}
+      </a>
+    {% endfor %}
+    <a href="{{ url_for('player_profile_season', player_slug=player.slug, view_slug='all') }}"
+       class="season-filter-link{% if selected_slug == 'all' %} is-active{% endif %}"
+       {% if selected_slug == 'all' %}aria-current="page"{% endif %}>
+      All Seasons
+    </a>
+  </nav>
+  <p class="footnote">Stats, standout rates, personal records, and game logs are recalculated for the selected period.</p>
+</section>
+
+<section class="content-section">
+  <div class="section-heading"><div><p class="eyebrow">{{ season_label | upper }} PERFORMANCE</p><h2>Player statistics</h2></div></div>
+  {% if summary %}
+  <div class="metric-grid">
+    {% for item in [('Goals','goals'),('Assists','assists'),('Saves','saves')] %}
+      <div class="metric-card"><span>{{ item[0] }}</span><strong>{{ "{:,}".format(summary.totals[item[1]]) }}</strong><small>{{ "%.2f"|format(summary.averages[item[1]]) }} per game</small></div>
+    {% endfor %}
+
+    <div class="metric-card">
+      <span>Shots · Shooting %</span>
+      <strong>{{ "{:,}".format(summary.totals.shots) }} <span class="metric-suffix">({{ "%.2f"|format(summary.shooting_pct) ~ "%" if summary.shooting_pct is not none else "N/A" }})</span></strong>
+      <small>{{ "%.2f"|format(summary.averages.shots) }} shots/game ({{ "%.2f"|format(summary.shooting_pct) ~ "% shooting" if summary.shooting_pct is not none else "no shots attempted" }})</small>
+    </div>
+
+    <div class="metric-card">
+      <span>Demo ratio · Inflicted / Taken</span>
+      <strong>{{ summary.demo_ratio if summary.demo_ratio is not none else "—" }}</strong>
+      {% if summary.demos_taken is not none %}
+        <small>{{ "%.2f"|format(summary.averages.demos) }} inflicted/game / {{ "%.2f"|format(summary.averages.demos_taken) }} taken/game</small>
+      {% else %}
+        <small>{{ "%.2f"|format(summary.averages.demos) }} inflicted/game · demos taken not imported yet</small>
+      {% endif %}
+    </div>
+
+    {% for item in [('G+A','ga'),('G+A+S','gas'),('Score','score')] %}
+      <div class="metric-card"><span>{{ item[0] }}</span><strong>{{ "{:,}".format(summary.totals[item[1]]) }}</strong><small>{{ "%.2f"|format(summary.averages[item[1]]) }} per game</small></div>
+    {% endfor %}
+  </div>
+  {% else %}
+    <div class="empty-state"><span class="empty-icon">🎮</span><h3>No game statistics imported yet</h3><p>{{ player.display_name }} is in the roster database. This page will populate as you add replay data.</p></div>
+  {% endif %}
+</section>
+<section class="content-section">
+  <div class="section-heading"><div><p class="eyebrow">NINE CATEGORIES</p><h2>Standout achievements</h2></div></div>
+  <div class="rules-grid">
+    {% for cat in standout_types %}
+    <div class="rule-card"><span class="rule-emoji">{{ cat.icon }}</span><div><strong>{{ cat.label }}</strong><span>{{ cat.rule }}</span></div><b class="category-count">{{ summary.accolades[loop.index0].count if summary else "—" }}</b></div>
+    {% endfor %}
+  </div>
+  <p class="footnote">Standout totals count qualifying player-games once. A game can satisfy more than one category.</p>
+</section>
+{% if team_splits|length > 1 %}
+<section class="content-section">
+  <div class="section-heading"><div><p class="eyebrow">SUBSTITUTIONS INCLUDED</p><h2>Performance by team</h2></div></div>
+  <div class="metric-grid">
+    {% for split in team_splits %}<div class="metric-card"><span>{{ split.team_name }}{% if not season %} · {{ split.season_name }}{% endif %}</span><strong>{{ split.summary.games }} games</strong><small>{{ split.summary.standouts }} standout games · {{ "%.2f"|format(split.summary.standout_pct) }}%</small></div>{% endfor %}
+  </div>
+</section>
+{% endif %}
+<section class="content-section">
+  <div class="section-heading"><div><p class="eyebrow">PERSONAL RECORD BOOK</p><h2>Individual game highs</h2></div></div>
+  {% if bests %}
+  <div class="table-scroll"><table class="data-table"><thead><tr><th>Category</th><th>Best</th><th>Game</th></tr></thead><tbody>
+    {% for best in bests %}<tr><td class="label-cell"><span class="record-icon">{{ best.icon }}</span>{{ best.label }}</td><td><b class="record-number">{{ "{:,}".format(best.value) }}</b></td><td>{% for g in best.winners %}<div class="holder-line">vs {{ g.opponent }} · G{{ g.game_number }} ({{ g.team_name }}{% if not season %} · {{ g.season_name }}{% endif %}) {% if g.replay_url %}<a class="tiny-external" href="{{ g.replay_url }}" rel="noopener noreferrer" target="_blank">↗</a>{% endif %}</div>{% endfor %}</td></tr>{% endfor %}
+  </tbody></table></div>
+  {% else %}<div class="empty-state"><h3>No personal records to display yet</h3><p>Import game statistics to populate this table.</p></div>{% endif %}
+</section>
+<section class="content-section">
+  <div class="section-heading"><div><p class="eyebrow">REPLAY-BY-REPLAY</p><h2>Game log</h2></div></div>
+  {% if games %}
+  <div class="table-scroll"><table class="data-table game-log"><thead><tr><th>Date / Opponent</th><th>Team</th><th>G</th><th>A</th><th>S</th><th>Score</th><th>Standout</th></tr></thead><tbody>
+    {% for g in games %}
+    <tr><td><strong>vs {{ g.opponent }}</strong><div class="small muted">{{ g.played_on or "No date" }} · G{{ g.game_number }} · {{ g.competition }}{% if not season %} · {{ g.season_name }}{% endif %}{% if g.replay_url %} · <a href="{{ g.replay_url }}" rel="noopener noreferrer" target="_blank">Replay ↗</a>{% endif %}</div></td><td><span class="team-chip team-chip-{{ g.team_slug }}">{{ g.team_slug | capitalize }}</span></td><td>{{ g.goals }}</td><td>{{ g.assists }}</td><td>{{ g.saves }}</td><td>{{ g.score }}</td><td>{% if g.is_standout %}<span class="pill pill-orange">★ YES</span><div class="small accolade-inline">{% for cat in standout_types %}{% if g[cat.field] %}<span title="{{ cat.label }}">{{ cat.icon }}</span>{% endif %}{% endfor %}</div>{% else %}<span class="muted">—</span>{% endif %}</td></tr>
+    {% endfor %}
+  </tbody></table></div>
+  {% else %}<div class="empty-state"><h3>Game log is empty</h3><p>Individual game appearances will show here after the replay importer runs.</p></div>{% endif %}
+</section>
+{% if player.aliases or player.socials %}
+<section class="content-section"><div class="section-heading"><div><p class="eyebrow">IDENTITY</p><h2>Player aliases</h2></div></div><div class="detail-panel">
+  {% if player.aliases %}<div><span>In-game names</span><strong>{% for a in player.aliases %}{{ a.alias }}{% if not loop.last %} · {% endif %}{% endfor %}</strong></div>{% endif %}
+  {% for social in player.socials %}<div><span>{{ social.platform | capitalize }}</span><strong>@{{ social.username.lstrip('@') }}</strong></div>{% endfor %}
+</div></section>
+{% endif %}
+{% endblock %}

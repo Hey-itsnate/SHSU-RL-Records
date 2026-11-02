@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}{{ team.name }} · {{ season.name }} · SHSU RL{% endblock %}
+{% block content %}
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="{{ url_for('home') }}">Archive</a><span>/</span><a href="{{ url_for('season_page', season_slug=season.slug) }}">{{ season.name }}</a><span>/</span><span>{{ team.name }}</span></nav>
+<section class="page-hero team-hero team-{{ team.slug }}">
+  <div class="eyebrow"><span class="eyebrow-dot"></span> {{ season.name | upper }} / TEAM PROFILE</div>
+  <div class="page-hero-row"><div><h1>SHSU <span class="accent">{{ team.slug | capitalize }}</span></h1><p>Season statistics, roster, team records, and series results.</p></div><div class="team-emblem">{{ team.slug[0] | upper }}</div></div>
+  <div class="stat-strip">
+    <div><strong>{{ members|length }}</strong><span>Rostered players</span></div>
+    <div><strong>{{ series_list|length }}</strong><span>Recorded series</span></div>
+    <div><strong>{{ games_imported }}</strong><span>Complete game stats</span></div>
+    <div><strong>{{ "%.2f"|format(averages.goals) if averages else "—" }}</strong><span>Goals per game</span></div>
+  </div>
+</section>
+
+<section class="content-section">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">SEASON RESULTS</p>
+      <h2>Season Record</h2>
+    </div>
+  </div>
+
+  <div class="metric-grid">
+    <div class="metric-card">
+      <span>Series Record</span>
+      <strong>
+        {{ season_records.total.wins }}–{{ season_records.total.losses }}
+      </strong>
+      <small>Across all competitions</small>
+    </div>
+
+    <div class="metric-card">
+      <span>Official Game Record</span>
+      <strong>
+        {{ season_records.total.official_wins }}–{{ season_records.total.official_losses }}
+      </strong>
+      <small>Includes awarded forfeits</small>
+    </div>
+
+    <div class="metric-card">
+      <span>Played Game Record</span>
+      <strong>
+        {{ season_records.total.played_wins }}–{{ season_records.total.played_losses }}
+      </strong>
+      <small>Excludes forfeits</small>
+    </div>
+
+    <div class="metric-card">
+      <span>Forfeit Game Record</span>
+      <strong>
+        {{ season_records.total.forfeit_wins }}–{{ season_records.total.forfeit_losses }}
+      </strong>
+      <small>Awarded games only</small>
+    </div>
+  </div>
+
+  <div class="table-scroll">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Competition</th>
+          <th>Series</th>
+          <th>Official Games</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in season_records.by_competition %}
+        <tr>
+          <td>{{ record.competition }}</td>
+          <td>{{ record.wins }}–{{ record.losses }}</td>
+          <td>{{ record.official_wins }}–{{ record.official_losses }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="content-section">
+  <div class="section-heading"><div><p class="eyebrow">PER PLAYED GAME</p><h2>Team averages</h2></div></div>
+  {% if averages %}
+  <div class="metric-grid">
+    {% for item in [
+      ('Goals','goals'),('Goals Against','goals_against'),('Goal Diff','goal_diff'),
+      ('Team Score','score'),('Assists','assists'),('Saves','saves'),
+      ('Shots','shots'),('Demolitions','demos')
+    ] %}
+    <div class="metric-card"><span>{{ item[0] }}</span><strong>{{ "%.2f"|format(averages[item[1]]) }}</strong><small>Per complete game</small></div>
+    {% endfor %}
+  </div>
+  {% else %}
+    <div class="empty-state"><span class="empty-icon">📊</span><h3>Awaiting imported game stats</h3><p>Team averages are calculated only from played games with all three SHSU player rows available.</p></div>
+  {% endif %}
+</section>
+<section class="content-section">
+  <div class="section-heading"><div><p class="eyebrow">THE ROSTER</p><h2>Players</h2></div></div>
+  <div class="player-tiles">
+    {% for p in members %}
+    <a class="player-tile" href="{{ url_for('player_page', season_slug=season.slug, player_slug=p.slug) }}">
+      <span class="player-avatar">{{ p.display_name[0] }}</span>
+      <div class="player-tile-info"><strong>{{ p.display_name }}</strong><span>{{ p.role | capitalize }}{% if p.discord %} · @{{ p.discord.lstrip('@') }}{% endif %}</span>
+      <small>{% if p.summary %}{{ p.summary.games }} games · {{ p.summary.standouts }} standouts{% else %}Stats not imported{% endif %}</small></div>
+      <span class="tile-arrow">↗</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="content-section">
+  <div class="section-heading"><div><p class="eyebrow">SINGLE-GAME HIGHS</p><h2>{{ team.slug | capitalize }} team records</h2></div></div>
+  {% if records %}
+  <div class="table-scroll"><table class="data-table"><thead><tr><th>Category</th><th>Record</th><th>Match</th></tr></thead><tbody>
+  {% for record in records %}<tr><td class="label-cell"><span class="record-icon">{{ record.icon }}</span> {{ record.label }}</td><td><b class="record-number">{{ "{:,}".format(record.value) }}</b></td><td>
+    {% for g in record.winners %}<div class="holder-line"><span>vs {{ g.opponent }} · G{{ g.game_number }}</span>{% if g.replay_url %}<a class="tiny-external" href="{{ g.replay_url }}" target="_blank" rel="noopener noreferrer">↗</a>{% endif %}</div>{% endfor %}
+  </td></tr>{% endfor %}
+  </tbody></table></div>
+  {% else %}<div class="empty-state"><span class="empty-icon">🏆</span><h3>No imported team records yet</h3><p>They will appear automatically after you import completed game statistics.</p></div>{% endif %}
+</section>
+
+<section class="content-section">
+  <div class="section-heading"><div><p class="eyebrow">MATCH HISTORY</p><h2>Series results</h2></div></div>
+  {% if series_list %}
+  <div class="table-scroll"><table class="data-table"><thead><tr><th>Date</th><th>Competition</th><th>Opponent</th><th>Official Result</th><th>Game record</th></tr></thead><tbody>
+  {% for s in series_list %}<tr><td>{{ s.played_on or "Date TBD" }}</td><td>{{ s.competition }}{% if s.round_label %}<div class="small muted">{{ s.round_label }}</div>{% endif %}</td><td>{{ s.opponent }}</td><td><span class="result-pill {{ 'win' if s.result == 'W' else 'loss' if s.result == 'L' else '' }}">{{ s.result }}</span></td><td>{{ s.official_games_won }}–{{ s.official_games_lost }}{% if s.ballchasing_group_url %} <a href="{{ s.ballchasing_group_url }}" target="_blank" rel="noopener noreferrer" class="tiny-external">Replay ↗</a>{% endif %}</td></tr>{% endfor %}
+  </tbody></table></div>
+  {% else %}<div class="empty-state"><span class="empty-icon">📅</span><h3>No series imported yet</h3><p>Series and replay links will populate when match data is loaded.</p></div>{% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}{{ season.name }} · SHSU RL Records{% endblock %}
+{% block content %}
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="{{ url_for('home') }}">Archive</a><span>/</span><span>{{ season.name }}</span></nav>
+<section class="page-hero compact-hero">
+  <div class="eyebrow"><span class="eyebrow-dot"></span> SEASON RECORD BOOK</div>
+  <div class="page-hero-row">
+    <div><h1>{{ season.name }}<span class="accent">.</span></h1><p>Records and standout performances across Orange, White, and Black.</p></div>
+    <div class="season-tag">{{ season.name.split(" ")[0] | upper }} <strong>{{ season.name[-2:] }}</strong></div>
+  </div>
+  <div class="stat-strip">
+    <div><strong>{{ teams|length }}</strong><span>SHSU Rosters</span></div>
+    <div><strong>{{ total_series }}</strong><span>Recorded Series</span></div>
+    <div><strong>{{ games_imported }}</strong><span>Complete Game Stats</span></div>
+    <div><strong>{{ standout_count }}</strong><span>Standout Games</span></div>
+  </div>
+</section>
+
+<section class="content-section">
+  <div class="section-heading"><div><p class="eyebrow">THIS SEASON</p><h2>Record Book</h2></div></div>
+  <div class="tabbar" role="tablist" aria-label="{{ season.name }} record categories" data-tabs>
+    <button type="button" class="tab active" id="tab-teams" role="tab" aria-controls="panel-teams" aria-selected="true" data-tab="teams">🏆 Team Records</button>
+    <button type="button" class="tab" id="tab-individuals" role="tab" aria-controls="panel-individuals" aria-selected="false" data-tab="individuals">🎯 Individual Records</button>
+    <button type="button" class="tab" id="tab-standouts" role="tab" aria-controls="panel-standouts" aria-selected="false" data-tab="standouts">⭐ Standouts</button>
+  </div>
+
+  <div class="tab-panel" id="panel-teams" role="tabpanel" aria-labelledby="tab-teams" data-panel="teams">
+    <div class="subsection-heading"><h3>Teams this season</h3><p>Select a roster for season averages, players, and match results.</p></div>
+    <div class="team-tiles">
+      {% for team in teams %}
+      <a class="team-tile team-{{ team.slug }}" href="{{ url_for('team_page', season_slug=season.slug, team_slug=team.slug) }}">
+        <div class="team-tile-top"><span class="team-bullet"></span><span class="muted small">SHSU / {{ team.slug | upper }}</span><span class="tile-arrow">↗</span></div>
+        <h3>{{ team.slug | capitalize }}</h3>
+        <p>{{ team.roster|length }} rostered players · {{ team.series_count }} recorded series</p>
+        <div class="tile-metric">{% if team.averages %}<strong>{{ "%.2f"|format(team.averages.goals) }}</strong><span>Goals / game</span>{% else %}<strong>—</strong><span>No game stats imported</span>{% endif %}</div>
+      </a>
+      {% endfor %}
+    </div>
+
+    <div class="subsection-heading"><h3>All SHSU team records</h3><p>Best single-game totals across all three teams in {{ season.name }}.</p></div>
+    {% if team_records %}
+      <div class="table-scroll"><table class="data-table">
+        <thead><tr><th>Record</th><th>Value</th><th>Holder / Match</th></tr></thead>
+        <tbody>{% for record in team_records %}
+          <tr><td class="label-cell"><span class="record-icon">{{ record.icon }}</span> {{ record.label }}</td><td><b class="record-number">{{ record.value }}</b></td>
+            <td>{% for g in record.winners %}<div class="holder-line"><a href="{{ url_for('team_page', season_slug=season.slug, team_slug=g.team_slug) }}">{{ g.team_name }}</a><span class="muted">vs {{ g.opponent }} · G{{ g.game_number }}</span>{% if g.replay_url %}<a class="tiny-external" href="{{ g.replay_url }}" rel="noopener noreferrer" target="_blank" aria-label="Open replay">↗</a>{% endif %}</div>{% endfor %}</td></tr>
+        {% endfor %}</tbody>
+      </table></div>
+    {% else %}
+      <div class="empty-state"><span class="empty-icon">🏆</span><h3>Team records will appear here</h3><p>Import completed 3-player game statistics to automatically calculate every team record.</p></div>
+    {% endif %}
+
+    <div class="subsection-heading"><h3>Records by roster</h3><p>Each team's own best performances for the season.</p></div>
+    <div class="accordion-stack">
+      {% for team in teams %}
+      <details class="accordion"><summary><span class="team-bullet team-bullet-{{ team.slug }}"></span><strong>{{ team.name }}</strong><span class="muted">Single-game team highs</span><span class="accordion-chevron">⌄</span></summary>
+        <div class="accordion-content">
+          {% if team.records %}
+          <div class="mini-record-grid">{% for record in team.records %}
+            <div class="mini-record"><span class="muted">{{ record.icon }} {{ record.label }}</span><strong>{{ record.value }}</strong></div>
+          {% endfor %}</div>
+          {% else %}<p class="muted">No complete game statistics imported for this roster yet.</p>{% endif %}
+          <a class="text-link" href="{{ url_for('team_page', season_slug=season.slug, team_slug=team.slug) }}">View {{ team.name }} →</a>
+        </div>
+      </details>
+      {% endfor %}
+    </div>
+  </div>
+
+  
+
+  <div class="tab-panel" id="panel-individuals" role="tabpanel" aria-labelledby="tab-individuals" data-panel="individuals" hidden>
+
+    <div class="subsection-heading"><h3>All SHSU individual records</h3><p>Highest individual game statistics across all rosters, including ties.</p></div>
+    {% if individual_records %}
+      <div class="table-scroll"><table class="data-table">
+        <thead><tr><th>Record</th><th>Value</th><th>Player / Match</th></tr></thead>
+        <tbody>{% for record in individual_records %}
+          <tr><td class="label-cell"><span class="record-icon">{{ record.icon }}</span> {{ record.label }}</td><td><b class="record-number">{{ "{:,}".format(record.value) }}</b></td>
+          <td>{% for g in record.winners %}<div class="holder-line"><a href="{{ url_for('player_page', season_slug=season.slug, player_slug=g.player_slug) }}">{{ g.display_name }}</a><span class="muted">vs {{ g.opponent }} · G{{ g.game_number }}</span>{% if g.replay_url %}<a class="tiny-external" href="{{ g.replay_url }}" rel="noopener noreferrer" target="_blank">↗</a>{% endif %}</div>{% endfor %}</td></tr>
+        {% endfor %}</tbody>
+      </table></div>
+    {% else %}
+      <div class="empty-state"><span class="empty-icon">🎯</span><h3>No individual game records yet</h3><p>These records will populate directly from the player-game statistics table.</p></div>
+    {% endif %}
+
+
+    <div class="subsection-heading"><h3>Best single game by player</h3><p>Each player's highest recorded scoreboard score this season.</p></div>
+    {% if personal_bests %}
+      <div class="table-scroll"><table class="data-table">
+        <thead><tr><th>Player</th><th>Best Score</th><th>Performance</th><th>Match</th></tr></thead>
+        <tbody>{% for g in personal_bests %}
+          <tr><td><a class="player-link" href="{{ url_for('player_page', season_slug=season.slug, player_slug=g.player_slug) }}">{{ g.display_name }} <span>↗</span></a></td>
+          <td><b class="record-number">{{ "{:,}".format(g.score) }}</b></td>
+          <td class="muted">{{ g.goals }}G · {{ g.assists }}A · {{ g.saves }}S · {{ g.shots }} shots</td>
+          <td><span>{{ g.team_name }} vs {{ g.opponent }}</span><div class="muted small">Game {{ g.game_number }} · {{ g.competition }}</div></td></tr>
+        {% endfor %}</tbody>
+      </table></div>
+    {% else %}
+      <div class="empty-state"><span class="empty-icon">🎯</span><h3>Player bests aren't imported yet</h3><p>Once replay stats are loaded, every player will have a personal best automatically.</p></div>
+    {% endif %}
+
+    
+  </div>
+
+  <div class="tab-panel" id="panel-standouts" role="tabpanel" aria-labelledby="tab-standouts" data-panel="standouts" hidden>
+    <div class="subsection-heading"><h3>Standout leaderboard</h3><p>Ranked by qualifying games ÷ games played. Multiple accolades in one game count only once.</p></div>
+    <div class="table-scroll"><table class="data-table leaderboard-table">
+      <thead><tr><th>#</th><th>Player</th><th>Standouts</th><th>Games</th><th>Rate</th><th>Accolades</th></tr></thead>
+      <tbody>{% for p in leaders %}
+      <tr><td><span class="rank-number">{{ loop.index if p.games_played else "—" }}</span></td>
+          <td><a class="player-link" href="{{ url_for('player_page', season_slug=season.slug, player_slug=p.slug) }}">{{ p.display_name }} <span>↗</span></a></td>
+          <td><strong>{{ p.standout_games }}</strong></td><td>{{ p.games_played }}</td>
+          <td>{% if p.games_played %}<span class="rate-badge">{{ "%.2f"|format(p.standout_pct) }}%</span>{% else %}<span class="muted">—</span>{% endif %}</td>
+          <td><details class="inline-details"><summary>9 categories <span>⌄</span></summary><div class="accolade-popover">
+          {% for cat in standout_types %}<div><span>{{ cat.icon }} {{ cat.label }}</span><strong>{{ p[cat.field] }}</strong></div>{% endfor %}
+          </div></details></td></tr>
+      {% endfor %}</tbody>
+    </table></div>
+    {% if appearances == 0 %}<div class="notice">Player profiles and roster assignments are live. Standout counts will appear once you import replay statistics.</div>{% endif %}
+    <div class="subsection-heading"><h3>What qualifies as a standout?</h3><p>Each player-game can earn multiple categories, but only one standout game.</p></div>
+    <div class="rules-grid">
+      {% for cat in standout_types %}<div class="rule-card"><span class="rule-emoji">{{ cat.icon }}</span><div><strong>{{ cat.label }}</strong><span>{{ cat.rule }}</span></div></div>{% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

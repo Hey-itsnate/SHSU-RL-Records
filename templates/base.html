@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101218">
+  <meta name="description" content="SHSU Rocket League season records, teams, players, and standout performances.">
+  <title>{% block title %}SHSU Rocket League Records{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+  <div class="site-shell">
+    <aside class="sidebar" id="site-sidebar" aria-label="Main navigation">
+      <a class="brand" href="{{ url_for('home') }}" aria-label="SHSU Rocket League Records home">
+        <span class="brand-mark" aria-hidden="true">S<span>★</span></span>
+        <span class="brand-copy"><strong>SHSU <span>RL</span></strong><small>RECORD BOOK</small></span>
+      </a>
+      <div class="nav-section">
+        <div class="nav-label">EXPLORE</div>
+        <a class="nav-link {{ 'active' if active_page == 'home' else '' }}" href="{{ url_for('home') }}">
+          <span aria-hidden="true">⌂</span> Overview
+        </a>
+        <div class="nav-label nav-label--spaced">SEASON ARCHIVE</div>
+        {% for nav_season in site_seasons %}
+        <a class="nav-link {{ 'active' if active_page == 'seasons' and season is defined and season is not none and season.slug == nav_season.slug else '' }}"
+           href="{{ url_for('season_page', season_slug=nav_season.slug) }}">
+          <span aria-hidden="true">▦</span> {{ nav_season.name }}
+        </a>
+        {% endfor %}
+      </div>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span>
+        <div><strong>SHSU Esports</strong><small>Community records archive</small></div>
+      </div>
+    </aside>
+    <div class="main-shell">
+      <header class="topbar">
+        <button class="menu-toggle" type="button" id="menu-toggle" aria-label="Toggle navigation"
+                aria-controls="site-sidebar" aria-expanded="false">☰</button>
+        <a class="topbar-brand" href="{{ url_for('home') }}">SHSU <b>RL</b> <span>/ RECORDS</span></a>
+        <div class="topbar-meta"><span class="live-dot"></span> COMMUNITY ARCHIVE</div>
+      </header>
+      <main id="main" class="page-content">
+        {% block content %}{% endblock %}
+      </main>
+      <footer class="site-footer">
+        <span>SHSU Rocket League • Independent community records archive</span>
+        <span>Stats from recorded games · Forfeits excluded from player statistics</span>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>
