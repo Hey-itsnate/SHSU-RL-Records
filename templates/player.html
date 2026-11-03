@@ -84,7 +84,7 @@
   <div class="section-heading"><div><p class="eyebrow">NINE CATEGORIES</p><h2>Standout achievements</h2></div></div>
   <div class="rules-grid">
     {% for cat in standout_types %}
-    <div class="rule-card"><span class="rule-emoji">{{ cat.icon }}</span><div><strong>{{ cat.label }}</strong><span>{{ cat.rule }}</span></div><b class="category-count">{{ summary.accolades[loop.index0].count if summary else "—" }}</b></div>
+    <div class="rule-card"><span class="rule-emoji">{{ cat.icon }}</span><div><strong>{{ cat.label }}</strong><span>{{ cat.rule }}</span></div><b class="category-count{% if summary and summary.accolades[loop.index0].count == 0 %} category-count--zero{% endif %}">{{ summary.accolades[loop.index0].count if summary else "—" }}</b></div>
     {% endfor %}
   </div>
   <p class="footnote">Standout totals count qualifying player-games once. A game can satisfy more than one category.</p>
