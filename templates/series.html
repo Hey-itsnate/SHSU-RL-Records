@@ -36,6 +36,16 @@
   </div>
 </section>
 
+  {% set highlighted_games = series_highlight_games(series.id) %}
+  {% if highlighted_games %}
+  <nav class="series-highlight-nav" aria-label="Games with highlights" style="margin:0 0 18px">
+    <strong>🎬 Highlights:</strong>
+    {% for hg in highlighted_games %}
+      <a class="season-filter-link" href="#game-{{ hg.game_number }}">Game {{ hg.game_number }} ({{ hg.highlight_count }})</a>
+    {% endfor %}
+  </nav>
+  {% endif %}
+
 {% if team.forfeit_wins or team.forfeit_losses %}
 <div class="notice series-notice">
   Awarded forfeits: {{ team.forfeit_wins }} win(s), {{ team.forfeit_losses }} loss(es).
@@ -138,6 +148,19 @@
         </div>
         {% if g.replay_url %}<a class="series-replay-link" href="{{ g.replay_url }}" target="_blank" rel="noopener noreferrer">Open replay ↗</a>{% endif %}
       </div>
+      {% set clips = highlights_for_game(g.id) %}
+      {% if clips %}
+      <div class="series-highlight-list" style="margin:12px 0;padding:12px 16px;border:1px solid var(--line);border-radius:12px">
+        <strong>🎬 Game highlights</strong>
+        <ul>
+        {% for clip in clips %}
+          <li><a href="{{ clip.url }}" target="_blank" rel="noopener noreferrer">{{ clip.title }} ↗</a>
+            {% if clip.players %}<span class="small muted"> — {% for p in clip.players %}{{ p.display_name }}{% if not loop.last %}, {% endif %}{% endfor %}</span>{% endif %}
+          </li>
+        {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
       {% if g.status == 'played' %}
         {% if g.complete %}
         <div class="series-game-totals">

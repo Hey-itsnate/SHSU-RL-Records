@@ -31,7 +31,13 @@ def close_connection(exception=None):
 
 @app.context_processor
 def inject_global_navigation():
-    return {"site_seasons": repo.seasons(db()), "standout_types": repo.STANDOUT_TYPES}
+    conn = db()
+    return {
+        "site_seasons": repo.seasons(conn),
+        "standout_types": repo.STANDOUT_TYPES,
+        "highlights_for_game": lambda game_id: repo.highlights_for_game(conn, game_id),
+        "series_highlight_games": lambda series_id: repo.series_highlight_games(conn, series_id),
+    }
 
 
 def lookup_season(season_slug):
@@ -274,6 +280,13 @@ def _combined_team_records(seasonal_records):
     }
 
 
+def _team_series_with_activity(conn, items):
+    activity = repo.team_series_activity(conn, [item["id"] for item in items])
+    return [{**item, **activity.get(item["id"], {
+        "standout_count": 0, "highlight_count": 0, "highlight_game_count": 0
+    })} for item in items]
+
+
 @app.route("/all-seasons/teams/<team_slug>/")
 def all_seasons_team_page(team_slug):
     """One historical SHSU team page per color, with season-labelled records."""
@@ -283,10 +296,12 @@ def all_seasons_team_page(team_slug):
     results = []
     season_records = []
     members_by_id = {}
+    team_season_ids = []
     for historical_season in repo.seasons(conn):
         team = repo.team_season(conn, historical_season["id"], team_slug)
         if not team:
             continue
+        team_season_ids.append(team["id"])
         periods.append({"slug": historical_season["slug"], "name": historical_season["name"]})
         games.extend(_labelled_games(
             repo.team_game_rows(conn, historical_season["id"], team["id"]),
@@ -338,7 +353,10 @@ def all_seasons_team_page(team_slug):
         averages=repo.aggregate_games(games),
         season_records=_combined_team_records(season_records),
         records=repo.records_for_games(games), members=members,
-        series_list=results, games_imported=len(games),
+        series_list=_team_series_with_activity(conn, results), games_imported=len(games),
+        team_individual_records=repo.individual_records(
+            repo.team_individual_games(conn, team_season_ids)
+        ),
     )
 
 
@@ -361,7 +379,10 @@ def team_page(season_slug, team_slug):
         averages=repo.aggregate_games(games),
         season_records=repo.team_season_records(conn, team["id"]),
         records=repo.records_for_games(games), members=members,
-        series_list=repo.team_series(conn, team["id"]),
+        series_list=_team_series_with_activity(conn, repo.team_series(conn, team["id"])),
+        team_individual_records=repo.individual_records(
+            repo.team_individual_games(conn, [team["id"]])
+        ),
         games_imported=len(games),
     )
 

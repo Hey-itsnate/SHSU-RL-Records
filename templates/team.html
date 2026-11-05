@@ -133,12 +133,116 @@
   {% else %}<div class="empty-state"><span class="empty-icon">🏆</span><h3>No imported team records yet</h3><p>They will appear automatically after you import completed game statistics.</p></div>{% endif %}
 </section>
 
-<section class="content-section">
+<section class="content-section" id="individual-records">
+  <div class="section-heading"><div>
+    <p class="eyebrow">PLAYER ACHIEVEMENTS</p>
+    <h2>{{ team.slug | capitalize }} individual records</h2>
+  </div></div>
+  <p class="muted small">
+    {% if all_time|default(false) %}
+      Highest individual single-game performances while playing for SHSU {{ team.slug | capitalize }} across recorded seasons.
+    {% else %}
+      Highest individual single-game performances while playing for SHSU {{ team.slug | capitalize }} in {{ season.name }}.
+    {% endif %}
+    All ties are shown. Players who substituted for this roster are included.
+    These records are separate from the overall season leaderboards.
+  </p>
+  {% if team_individual_records %}
+  <div class="table-scroll"><table class="data-table">
+    <thead><tr><th>Category</th><th>Record</th><th>Player / Match</th></tr></thead>
+    <tbody>
+    {% for record in team_individual_records %}
+      <tr><td class="label-cell"><span class="record-icon">{{ record.icon }}</span> {{ record.label }}</td>
+        <td><b class="record-number">{{ "{:,}".format(record.value) }}</b></td>
+        <td>
+          {% for g in record.winners %}
+            <div class="holder-line">
+              <a href="{{ url_for('player_profile_season', player_slug=g.player_slug, view_slug='all' if all_time|default(false) else season.slug) }}">{{ g.display_name }}</a>
+              {% if all_time|default(false) %}<span class="small muted">{{ g.season_name }}</span>{% endif %}
+              <a class="muted" href="{{ url_for('series.series_page', series_id=g.series_id) }}#game-{{ g.game_number }}">vs {{ g.opponent }} · G{{ g.game_number }}</a>
+              {% if g.replay_url %}<a class="tiny-external" href="{{ g.replay_url }}" rel="noopener noreferrer" target="_blank">↗</a>{% endif %}
+            </div>
+          {% endfor %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+    <div class="empty-state"><h3>No individual game records yet</h3><p>Records appear when player-game statistics are imported.</p></div>
+  {% endif %}
+</section>
+
+
+<style>#team-series-table tbody tr[hidden] { display: none !important; }</style>
+<section class="content-section" id="series-results">
   <div class="section-heading"><div><p class="eyebrow">MATCH HISTORY</p><h2>Series results</h2></div></div>
   {% if series_list %}
-  <div class="table-scroll"><table class="data-table"><thead><tr>{% if all_time|default(false) %}<th>Season</th>{% endif %}<th>Date</th><th>Competition</th><th>Opponent</th><th>Official Result</th><th>Game record</th></tr></thead><tbody>
-  {% for s in series_list %}<tr>{% if all_time|default(false) %}<td><a href="{{ url_for('team_page', season_slug=s.season_slug, team_slug=team.slug) }}">{{ s.season_name }}</a></td>{% endif %}<td>{{ s.played_on or "Date TBD" }}</td><td>{{ s.competition }}{% if s.round_label %}<div class="small muted">{{ s.round_label }}</div>{% endif %}</td><td><a href="{{ url_for('series.series_page', series_id=s.id) }}">{{ s.opponent }} ↗</a></td><td><span class="result-pill {{ 'win' if s.result == 'W' else 'loss' if s.result == 'L' else '' }}">{{ s.result }}</span></td><td>{{ s.official_games_won }}–{{ s.official_games_lost }}{% if s.ballchasing_group_url %} <a href="{{ s.ballchasing_group_url }}" target="_blank" rel="noopener noreferrer" class="tiny-external">Replay ↗</a>{% endif %}</td></tr>{% endfor %}
-  </tbody></table></div>
-  {% else %}<div class="empty-state"><span class="empty-icon">📅</span><h3>No series imported yet</h3><p>Series and replay links will populate when match data is loaded.</p></div>{% endif %}
+  <div class="player-stats-controls" style="margin-bottom:14px;display:flex;flex-wrap:wrap;gap:14px">
+    <label style="display:flex;flex-direction:column;gap:5px">
+      <span class="small muted">Standouts</span>
+      <select id="team-series-standout-filter" aria-label="Filter series by standout games">
+        <option value="all">All series</option>
+        <option value="yes">With standouts</option>
+        <option value="no">Without standouts</option>
+      </select>
+    </label>
+    <label style="display:flex;flex-direction:column;gap:5px">
+      <span class="small muted">Highlights</span>
+      <select id="team-series-highlight-filter" aria-label="Filter series by highlights">
+        <option value="all">All series</option>
+        <option value="yes">With highlights</option>
+        <option value="no">Without highlights</option>
+      </select>
+    </label>
+    <span id="team-series-filter-count" class="small muted" aria-live="polite" style="align-self:end"></span>
+  </div>
+  <div class="table-scroll"><table class="data-table" id="team-series-table">
+    <thead><tr>{% if all_time|default(false) %}<th>Season</th>{% endif %}<th>Date</th><th>Competition</th><th>Opponent</th><th>Official Result</th><th>Game record</th><th>Standouts</th><th>Highlights</th></tr></thead>
+    <tbody>
+    {% for s in series_list %}
+      <tr data-standouts="{{ s.standout_count }}" data-highlights="{{ s.highlight_count }}">
+        {% if all_time|default(false) %}<td><a href="{{ url_for('team_page', season_slug=s.season_slug, team_slug=team.slug) }}">{{ s.season_name }}</a></td>{% endif %}
+        <td>{{ s.played_on or "Date TBD" }}</td>
+        <td>{{ s.competition }}{% if s.round_label %}<div class="small muted">{{ s.round_label }}</div>{% endif %}</td>
+        <td><a href="{{ url_for('series.series_page', series_id=s.id) }}">{{ s.opponent }} ↗</a></td>
+        <td><span class="result-pill {{ 'win' if s.result == 'W' else 'loss' if s.result == 'L' else '' }}">{{ s.result }}</span></td>
+        <td>{{ s.official_games_won }}–{{ s.official_games_lost }}{% if s.ballchasing_group_url %} <a href="{{ s.ballchasing_group_url }}" target="_blank" rel="noopener noreferrer" class="tiny-external">Replay ↗</a>{% endif %}</td>
+        <td>{{ s.standout_count if s.standout_count else "–" }}</td>
+        <td>{% if s.highlight_count %}<a href="{{ url_for('series.series_page', series_id=s.id) }}">{{ s.highlight_count }} 🎬</a>{% else %}–{% endif %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  <p id="team-series-filter-empty" class="small muted" hidden>No series match these filters.</p>
+  {% else %}
+  <div class="empty-state"><span class="empty-icon">📅</span><h3>No series imported yet</h3><p>Series and replay links will populate when match data is loaded.</p></div>
+  {% endif %}
 </section>
+<script>
+(() => {
+  const table = document.getElementById("team-series-table");
+  if (!table) return;
+  const standoutFilter = document.getElementById("team-series-standout-filter");
+  const highlightFilter = document.getElementById("team-series-highlight-filter");
+  const counter = document.getElementById("team-series-filter-count");
+  const empty = document.getElementById("team-series-filter-empty");
+  const rows = Array.from(table.tBodies[0].rows);
+  const match = (count, filter) => filter === "all" || (filter === "yes" ? count > 0 : count === 0);
+  function update() {
+    let visible = 0;
+    rows.forEach(row => {
+      const ok = match(Number(row.dataset.standouts), standoutFilter.value)
+              && match(Number(row.dataset.highlights), highlightFilter.value);
+      row.hidden = !ok;
+      if (ok) visible++;
+    });
+    counter.textContent = `${visible} of ${rows.length} series`;
+    empty.hidden = visible !== 0;
+  }
+  standoutFilter.addEventListener("change", update);
+  highlightFilter.addEventListener("change", update);
+  update();
+})();
+</script>
 {% endblock %}

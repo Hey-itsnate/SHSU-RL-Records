@@ -370,7 +370,11 @@ def player_games(conn, season_id, player_id):
     )
     taken_projection = "pg.demos_taken" if has_demos_taken else "NULL"
     return rows(conn.execute(f"""
-        SELECT v.*, {taken_projection} AS demos_taken, sr.played_on, sr.id AS series_id, g.game_number,
+        SELECT v.*, {taken_projection} AS demos_taken,
+               (SELECT COUNT(*) FROM highlights h WHERE h.game_id=g.id) AS highlight_count,
+               (SELECT COUNT(*) FROM highlights h JOIN highlight_players hp ON hp.highlight_id=h.id
+                WHERE h.game_id=g.id AND hp.player_id=v.player_id) AS featured_highlight_count,
+               sr.played_on, sr.id AS series_id, g.game_number,
                g.team_goals, g.opponent_goals, g.ballchasing_replay_url AS replay_url,
                o.name AS opponent, c.name AS competition,
                t.name AS team_name, t.slug AS team_slug,
@@ -445,3 +449,102 @@ def player_personal_records(games):
     if not games:
         return []
     return records_for_games(games, RECORD_METRICS)
+
+
+def highlights_for_game(conn, game_id):
+    """Public clips and tagged SHSU participants for a single played game."""
+    if not conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='highlights'").fetchone():
+        return []
+    clips = rows(conn.execute("""
+        SELECT h.id, h.game_id, h.title, h.url
+        FROM highlights h WHERE h.game_id=? ORDER BY h.id
+    """, (game_id,)))
+    for clip in clips:
+        clip["players"] = rows(conn.execute("""
+            SELECT p.id, p.slug, p.display_name
+            FROM highlight_players hp JOIN players p ON p.id=hp.player_id
+            WHERE hp.highlight_id=? ORDER BY p.display_name
+        """, (clip["id"],)))
+    return clips
+
+
+def series_highlight_games(conn, series_id):
+    """Distinct game numbers with clips; for the series page jump navigation."""
+    if not conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='highlights'").fetchone():
+        return []
+    return rows(conn.execute("""
+        SELECT g.id AS game_id, g.game_number, COUNT(h.id) AS highlight_count
+        FROM games g JOIN highlights h ON h.game_id=g.id
+        WHERE g.series_id=?
+        GROUP BY g.id, g.game_number ORDER BY g.game_number
+    """, (series_id,)))
+
+
+def team_series_activity(conn, series_ids):
+    """Counts per series for team pages.
+
+    A standout is ONE SHSU player-game with is_standout=1, even if that
+    performance earns multiple categories. Highlights are clip records.
+    No played game => no standout/highlight data (forfeits remain 0).
+    """
+    ids = sorted(set(int(sid) for sid in series_ids))
+    if not ids:
+        return {}
+    placeholders = ",".join("?" for _ in ids)
+    standout_rows = rows(conn.execute(f"""
+        SELECT g.series_id, COUNT(*) AS standout_count
+        FROM v_player_game_standouts v
+        JOIN games g ON g.id=v.game_id
+        WHERE g.series_id IN ({placeholders}) AND v.is_standout=1
+        GROUP BY g.series_id
+    """, ids))
+    activity = {sid: {"standout_count": 0, "highlight_count": 0,
+                      "highlight_game_count": 0} for sid in ids}
+    for row in standout_rows:
+        activity[row["series_id"]]["standout_count"] = row["standout_count"]
+
+    if conn.execute(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name='highlights'"
+    ).fetchone():
+        highlight_rows = rows(conn.execute(f"""
+            SELECT g.series_id, COUNT(h.id) AS highlight_count,
+                   COUNT(DISTINCT g.id) AS highlight_game_count
+            FROM highlights h JOIN games g ON g.id=h.game_id
+            WHERE g.series_id IN ({placeholders})
+            GROUP BY g.series_id
+        """, ids))
+        for row in highlight_rows:
+            activity[row["series_id"]]["highlight_count"] = row["highlight_count"]
+            activity[row["series_id"]]["highlight_game_count"] = row["highlight_game_count"]
+    return activity
+
+
+def team_individual_games(conn, team_season_ids):
+    """Player-game appearances restricted to team-season IDs.
+
+    Includes substitutes and transfers when they appeared for this team.
+    Uses the exact same record metric definitions as season-level records.
+    """
+    ids = sorted(set(int(tid) for tid in team_season_ids))
+    if not ids:
+        return []
+    placeholders = ",".join("?" for _ in ids)
+    return rows(conn.execute(f"""
+        SELECT v.*, p.slug AS player_slug, p.display_name,
+               g.game_number, g.ballchasing_replay_url AS replay_url,
+               sr.played_on, sr.id AS series_id,
+               o.name AS opponent, c.name AS competition,
+               t.name AS team_name, t.slug AS team_slug,
+               s.name AS season_name, s.slug AS season_slug
+        FROM v_player_game_standouts v
+        JOIN players p ON p.id=v.player_id
+        JOIN games g ON g.id=v.game_id
+        JOIN series sr ON sr.id=g.series_id
+        JOIN seasons s ON s.id=sr.season_id
+        JOIN opponents o ON o.id=sr.opponent_id
+        JOIN competitions c ON c.id=sr.competition_id
+        JOIN team_seasons ts ON ts.id=sr.team_season_id
+        JOIN teams t ON t.id=ts.team_id
+        WHERE v.team_season_id IN ({placeholders})
+        ORDER BY sr.played_on DESC, sr.id DESC, g.game_number DESC
+    """, ids))

@@ -119,11 +119,52 @@
 <section class="content-section">
   <div class="section-heading"><div><p class="eyebrow">REPLAY-BY-REPLAY</p><h2>Game log</h2></div></div>
   {% if games %}
+  <div class="player-game-filters" style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:15px">
+    <label>Game filter
+      <select id="game-log-kind" aria-label="Filter games">
+        <option value="all">All games</option>
+        <option value="highlight">Games with any highlight</option>
+        <option value="featured">Clips featuring this player</option>
+        <option value="standout">Any standout</option>
+      </select>
+    </label>
+    <label>Specific standout
+      <select id="game-log-category" aria-label="Filter by standout category">
+        <option value="">Any category</option>
+        {% for cat in standout_types %}
+        <option value="{{ cat.field }}">{{ cat.icon }} {{ cat.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <span id="game-log-count" class="small muted" aria-live="polite"></span>
+  </div>
   <div class="table-scroll"><table class="data-table game-log"><thead><tr><th>Date / Opponent</th><th>Team</th><th>G</th><th>A</th><th>S</th><th>Score</th><th>Standout</th></tr></thead><tbody>
     {% for g in games %}
-    <tr><td><strong><a href="{{ url_for('series.series_page', series_id=g.series_id) }}#game-{{ g.game_number }}">vs {{ g.opponent }}</a></strong><div class="small muted">{{ g.played_on or "No date" }} · G{{ g.game_number }} · {{ g.competition }}{% if not season %} · {{ g.season_name }}{% endif %}{% if g.replay_url %} · <a href="{{ g.replay_url }}" rel="noopener noreferrer" target="_blank">Replay ↗</a>{% endif %}</div></td><td><span class="team-chip team-chip-{{ g.team_slug }}">{{ g.team_slug | capitalize }}</span></td><td>{{ g.goals }}</td><td>{{ g.assists }}</td><td>{{ g.saves }}</td><td>{{ g.score }}</td><td>{% if g.is_standout %}<span class="pill pill-orange">★ YES</span><div class="small accolade-inline">{% for cat in standout_types %}{% if g[cat.field] %}<span title="{{ cat.label }}">{{ cat.icon }}</span>{% endif %}{% endfor %}</div>{% else %}<span class="muted">—</span>{% endif %}</td></tr>
+    <tr class="player-game-row" data-highlight="{{ '1' if g.highlight_count else '0' }}" data-featured="{{ '1' if g.featured_highlight_count else '0' }}" data-standout="{{ '1' if g.is_standout else '0' }}" data-categories="{% for cat in standout_types %}{% if g[cat.field] %}{{ cat.field }} {% endif %}{% endfor %}"><td><strong><a href="{{ url_for('series.series_page', series_id=g.series_id) }}#game-{{ g.game_number }}">vs {{ g.opponent }}</a></strong><div class="small muted">{{ g.played_on or "No date" }} · G{{ g.game_number }} · {{ g.competition }}{% if not season %} · {{ g.season_name }}{% endif %}{% if g.replay_url %} · <a href="{{ g.replay_url }}" rel="noopener noreferrer" target="_blank">Replay ↗</a>{% endif %}{% if g.highlight_count %} · <a href="{{ url_for('series.series_page', series_id=g.series_id) }}#game-{{ g.game_number }}">🎬 {{ g.highlight_count }} clip{{ 's' if g.highlight_count != 1 else '' }}</a>{% endif %}</div></td><td><span class="team-chip team-chip-{{ g.team_slug }}">{{ g.team_slug | capitalize }}</span></td><td>{{ g.goals }}</td><td>{{ g.assists }}</td><td>{{ g.saves }}</td><td>{{ g.score }}</td><td>{% if g.is_standout %}<span class="pill pill-orange">★ YES</span><div class="small accolade-inline">{% for cat in standout_types %}{% if g[cat.field] %}<span title="{{ cat.label }}">{{ cat.icon }}</span>{% endif %}{% endfor %}</div>{% else %}<span class="muted">—</span>{% endif %}</td></tr>
     {% endfor %}
   </tbody></table></div>
+  <script>
+  (() => {
+    const rows = Array.from(document.querySelectorAll(".player-game-row"));
+    const kind = document.getElementById("game-log-kind");
+    const category = document.getElementById("game-log-category");
+    const count = document.getElementById("game-log-count");
+    function filter() {
+      let visible = 0;
+      for (const row of rows) {
+        const k = kind.value;
+        const qualifies = k === "all" || row.dataset[k] === "1";
+        const matches = !category.value || row.dataset.categories.split(" ").includes(category.value);
+        row.hidden = !(qualifies && matches);
+        if (!row.hidden) visible++;
+      }
+      count.textContent = `${visible} of ${rows.length} games`;
+    }
+    kind.addEventListener("change", filter);
+    category.addEventListener("change", filter);
+    filter();
+  })();
+  </script>
   {% else %}<div class="empty-state"><h3>Game log is empty</h3><p>Individual game appearances will show here after the replay importer runs.</p></div>{% endif %}
 </section>
 {% if player.aliases or player.socials %}
