@@ -192,59 +192,116 @@
 <section class="content-section">
   <div class="section-heading"><div><p class="eyebrow">REPLAY-BY-REPLAY</p><h2>Game log</h2></div></div>
   
+  <div class="player-game-filters" style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:15px">
+    <label>Game filter
+      <select id="game-log-kind" aria-label="Filter games">
+        <option value="all">All games</option>
+        <option value="highlight">Games with any highlight</option>
+        <option value="featured">Clips featuring this player</option>
+        <option value="standout">Any standout</option>
+      </select>
+    </label>
+    <label>Specific standout
+      <select id="game-log-category" aria-label="Filter by standout category">
+        <option value="">Any category</option>
+        
+        <option value="score_550">💯 550+ Score</option>
+        
+        <option value="hat_trick">⚽ Hat Trick</option>
+        
+        <option value="playmaker">🤝 Playmaker</option>
+        
+        <option value="offensive_engine">🔥 Offensive Engine</option>
+        
+        <option value="anchor">⚓ Anchor</option>
+        
+        <option value="defensive_problem">🚌 Defensive Problem</option>
+        
+        <option value="two_way">🛡️⚔️ Two-Way</option>
+        
+        <option value="elite_disruptor">💥 Elite Disruptor</option>
+        
+        <option value="all_around">👑 All-Around</option>
+        
+      </select>
+    </label>
+    <span id="game-log-count" class="small muted" aria-live="polite"></span>
+  </div>
   <div class="table-scroll"><table class="data-table game-log"><thead><tr><th>Date / Opponent</th><th>Team</th><th>G</th><th>A</th><th>S</th><th>Score</th><th>Standout</th></tr></thead><tbody>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/46/#game-3">vs Western Kentucky University</a></strong><div class="small muted">2026-02-26 · G3 · CCS · <a href="https://ballchasing.com/replay/e0ba3140-f542-472d-8a6c-818baa8d7684" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>1</td><td>0</td><td>0</td><td>258</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/46/#game-3">vs Western Kentucky University</a></strong><div class="small muted">2026-02-26 · G3 · CCS · <a href="https://ballchasing.com/replay/e0ba3140-f542-472d-8a6c-818baa8d7684" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>1</td><td>0</td><td>0</td><td>258</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/46/#game-2">vs Western Kentucky University</a></strong><div class="small muted">2026-02-26 · G2 · CCS · <a href="https://ballchasing.com/replay/fbd5dd7c-e2c6-4b4e-bfcb-dc5982de037c" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>0</td><td>2</td><td>291</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/46/#game-2">vs Western Kentucky University</a></strong><div class="small muted">2026-02-26 · G2 · CCS · <a href="https://ballchasing.com/replay/fbd5dd7c-e2c6-4b4e-bfcb-dc5982de037c" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>0</td><td>2</td><td>291</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/46/#game-1">vs Western Kentucky University</a></strong><div class="small muted">2026-02-26 · G1 · CCS · <a href="https://ballchasing.com/replay/b44ff20c-b674-42ab-a1ef-4004a2dd9253" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>1</td><td>3</td><td>334</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/46/#game-1">vs Western Kentucky University</a></strong><div class="small muted">2026-02-26 · G1 · CCS · <a href="https://ballchasing.com/replay/b44ff20c-b674-42ab-a1ef-4004a2dd9253" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>1</td><td>3</td><td>334</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/39/#game-5">vs UCF</a></strong><div class="small muted">2026-02-24 · G5 · PCL · <a href="https://ballchasing.com/replay/0d64959a-4a63-461a-9a61-2fa4eec65cd1" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>1</td><td>0</td><td>174</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/39/#game-5">vs UCF</a></strong><div class="small muted">2026-02-24 · G5 · PCL · <a href="https://ballchasing.com/replay/0d64959a-4a63-461a-9a61-2fa4eec65cd1" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>1</td><td>0</td><td>174</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/39/#game-4">vs UCF</a></strong><div class="small muted">2026-02-24 · G4 · PCL · <a href="https://ballchasing.com/replay/b949b3cc-b412-45f8-ab1a-e54880714631" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>2</td><td>1</td><td>1</td><td>484</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/39/#game-4">vs UCF</a></strong><div class="small muted">2026-02-24 · G4 · PCL · <a href="https://ballchasing.com/replay/b949b3cc-b412-45f8-ab1a-e54880714631" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>2</td><td>1</td><td>1</td><td>484</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/39/#game-3">vs UCF</a></strong><div class="small muted">2026-02-24 · G3 · PCL · <a href="https://ballchasing.com/replay/5d1b9b4a-d3e8-4b45-af92-0f9fb6776b89" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>0</td><td>0</td><td>94</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/39/#game-3">vs UCF</a></strong><div class="small muted">2026-02-24 · G3 · PCL · <a href="https://ballchasing.com/replay/5d1b9b4a-d3e8-4b45-af92-0f9fb6776b89" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>0</td><td>0</td><td>94</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/39/#game-2">vs UCF</a></strong><div class="small muted">2026-02-24 · G2 · PCL · <a href="https://ballchasing.com/replay/c2c8a79f-cecd-4f9a-9410-bf96d70e3bda" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>1</td><td>1</td><td>210</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/39/#game-2">vs UCF</a></strong><div class="small muted">2026-02-24 · G2 · PCL · <a href="https://ballchasing.com/replay/c2c8a79f-cecd-4f9a-9410-bf96d70e3bda" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>1</td><td>1</td><td>210</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/39/#game-1">vs UCF</a></strong><div class="small muted">2026-02-24 · G1 · PCL · <a href="https://ballchasing.com/replay/8a8ac10d-efb3-4fb6-958a-8c9ff60d37c1" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>1</td><td>1</td><td>372</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/39/#game-1">vs UCF</a></strong><div class="small muted">2026-02-24 · G1 · PCL · <a href="https://ballchasing.com/replay/8a8ac10d-efb3-4fb6-958a-8c9ff60d37c1" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>1</td><td>1</td><td>372</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/44/#game-4">vs New Mexico State University</a></strong><div class="small muted">2026-02-19 · G4 · CCS · <a href="https://ballchasing.com/replay/aa4fae8f-5e49-464b-b09c-46a0ee7db544" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>1</td><td>0</td><td>1</td><td>405</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/44/#game-4">vs New Mexico State University</a></strong><div class="small muted">2026-02-19 · G4 · CCS · <a href="https://ballchasing.com/replay/aa4fae8f-5e49-464b-b09c-46a0ee7db544" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>1</td><td>0</td><td>1</td><td>405</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/44/#game-3">vs New Mexico State University</a></strong><div class="small muted">2026-02-19 · G3 · CCS · <a href="https://ballchasing.com/replay/6d315c58-c39e-4cee-98f4-4844d386fc1e" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>1</td><td>0</td><td>1</td><td>300</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/44/#game-3">vs New Mexico State University</a></strong><div class="small muted">2026-02-19 · G3 · CCS · <a href="https://ballchasing.com/replay/6d315c58-c39e-4cee-98f4-4844d386fc1e" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>1</td><td>0</td><td>1</td><td>300</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/44/#game-1">vs New Mexico State University</a></strong><div class="small muted">2026-02-19 · G1 · CCS · <a href="https://ballchasing.com/replay/30c9e134-2950-4707-a5be-d8e6f82ddb2f" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>3</td><td>1</td><td>380</td><td><span class="pill pill-orange">★ YES</span><div class="small accolade-inline"><span title="Playmaker">🤝</span></div></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="1" data-categories="playmaker "><td><strong><a href="/SHSU-RL-Records/series/44/#game-1">vs New Mexico State University</a></strong><div class="small muted">2026-02-19 · G1 · CCS · <a href="https://ballchasing.com/replay/30c9e134-2950-4707-a5be-d8e6f82ddb2f" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>3</td><td>1</td><td>380</td><td><span class="pill pill-orange">★ YES</span><div class="small accolade-inline"><span title="Playmaker">🤝</span></div></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/54/#game-2">vs KSU Premier B</a></strong><div class="small muted">2026-02-15 · G2 · CRL · <a href="https://ballchasing.com/replay/7e57d3cf-7f19-4686-889b-2659d89ef834" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>1</td><td>0</td><td>2</td><td>395</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/54/#game-2">vs KSU Premier B</a></strong><div class="small muted">2026-02-15 · G2 · CRL · <a href="https://ballchasing.com/replay/7e57d3cf-7f19-4686-889b-2659d89ef834" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>1</td><td>0</td><td>2</td><td>395</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/54/#game-1">vs KSU Premier B</a></strong><div class="small muted">2026-02-15 · G1 · CRL · <a href="https://ballchasing.com/replay/19163b7b-af6a-4a54-a299-a9f43230ae30" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>1</td><td>1</td><td>287</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/54/#game-1">vs KSU Premier B</a></strong><div class="small muted">2026-02-15 · G1 · CRL · <a href="https://ballchasing.com/replay/19163b7b-af6a-4a54-a299-a9f43230ae30" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>1</td><td>1</td><td>287</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/53/#game-2">vs Southern Miss</a></strong><div class="small muted">2026-02-15 · G2 · CRL · <a href="https://ballchasing.com/replay/6f5eba49-b5cc-4df6-a8b8-1eac05307698" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>2</td><td>1</td><td>3</td><td>698</td><td><span class="pill pill-orange">★ YES</span><div class="small accolade-inline"><span title="550+ Score">💯</span><span title="Two-Way">🛡️⚔️</span></div></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="1" data-categories="score_550 two_way "><td><strong><a href="/SHSU-RL-Records/series/53/#game-2">vs Southern Miss</a></strong><div class="small muted">2026-02-15 · G2 · CRL · <a href="https://ballchasing.com/replay/6f5eba49-b5cc-4df6-a8b8-1eac05307698" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>2</td><td>1</td><td>3</td><td>698</td><td><span class="pill pill-orange">★ YES</span><div class="small accolade-inline"><span title="550+ Score">💯</span><span title="Two-Way">🛡️⚔️</span></div></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/53/#game-1">vs Southern Miss</a></strong><div class="small muted">2026-02-15 · G1 · CRL · <a href="https://ballchasing.com/replay/e1328fb3-327d-4f6e-b467-1478c42b2492" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>1</td><td>0</td><td>1</td><td>391</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/53/#game-1">vs Southern Miss</a></strong><div class="small muted">2026-02-15 · G1 · CRL · <a href="https://ballchasing.com/replay/e1328fb3-327d-4f6e-b467-1478c42b2492" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>1</td><td>0</td><td>1</td><td>391</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/52/#game-2">vs CMU</a></strong><div class="small muted">2026-02-15 · G2 · CRL · <a href="https://ballchasing.com/replay/7e9fd639-97b0-4869-922c-c83a4bc51781" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>1</td><td>1</td><td>2</td><td>471</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/52/#game-2">vs CMU</a></strong><div class="small muted">2026-02-15 · G2 · CRL · <a href="https://ballchasing.com/replay/7e9fd639-97b0-4869-922c-c83a4bc51781" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>1</td><td>1</td><td>2</td><td>471</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/52/#game-1">vs CMU</a></strong><div class="small muted">2026-02-15 · G1 · CRL · <a href="https://ballchasing.com/replay/e4d07c33-7d6d-4b6c-96a0-4203120f82fd" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>2</td><td>3</td><td>1</td><td>575</td><td><span class="pill pill-orange">★ YES</span><div class="small accolade-inline"><span title="550+ Score">💯</span><span title="Playmaker">🤝</span><span title="Offensive Engine">🔥</span></div></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="1" data-categories="score_550 playmaker offensive_engine "><td><strong><a href="/SHSU-RL-Records/series/52/#game-1">vs CMU</a></strong><div class="small muted">2026-02-15 · G1 · CRL · <a href="https://ballchasing.com/replay/e4d07c33-7d6d-4b6c-96a0-4203120f82fd" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>2</td><td>3</td><td>1</td><td>575</td><td><span class="pill pill-orange">★ YES</span><div class="small accolade-inline"><span title="550+ Score">💯</span><span title="Playmaker">🤝</span><span title="Offensive Engine">🔥</span></div></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/51/#game-2">vs Baylor</a></strong><div class="small muted">2026-02-15 · G2 · CRL · <a href="https://ballchasing.com/replay/5165996b-b713-47b0-b391-e16f3c7675df" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>1</td><td>2</td><td>1</td><td>482</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/51/#game-2">vs Baylor</a></strong><div class="small muted">2026-02-15 · G2 · CRL · <a href="https://ballchasing.com/replay/5165996b-b713-47b0-b391-e16f3c7675df" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>1</td><td>2</td><td>1</td><td>482</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/51/#game-1">vs Baylor</a></strong><div class="small muted">2026-02-15 · G1 · CRL · <a href="https://ballchasing.com/replay/1b8adc5e-3329-4252-82ea-76703aa3efcd" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>2</td><td>0</td><td>3</td><td>449</td><td><span class="pill pill-orange">★ YES</span><div class="small accolade-inline"><span title="Two-Way">🛡️⚔️</span></div></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="1" data-categories="two_way "><td><strong><a href="/SHSU-RL-Records/series/51/#game-1">vs Baylor</a></strong><div class="small muted">2026-02-15 · G1 · CRL · <a href="https://ballchasing.com/replay/1b8adc5e-3329-4252-82ea-76703aa3efcd" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>2</td><td>0</td><td>3</td><td>449</td><td><span class="pill pill-orange">★ YES</span><div class="small accolade-inline"><span title="Two-Way">🛡️⚔️</span></div></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/50/#game-2">vs Georgia Tech</a></strong><div class="small muted">2026-02-15 · G2 · CRL · <a href="https://ballchasing.com/replay/0f18f379-f138-4141-b27d-c02e49f27903" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>1</td><td>0</td><td>184</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/50/#game-2">vs Georgia Tech</a></strong><div class="small muted">2026-02-15 · G2 · CRL · <a href="https://ballchasing.com/replay/0f18f379-f138-4141-b27d-c02e49f27903" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>1</td><td>0</td><td>184</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/50/#game-1">vs Georgia Tech</a></strong><div class="small muted">2026-02-15 · G1 · CRL · <a href="https://ballchasing.com/replay/92172671-57e5-4fc7-ac1e-5c3c62f9ec25" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>1</td><td>1</td><td>1</td><td>302</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/50/#game-1">vs Georgia Tech</a></strong><div class="small muted">2026-02-15 · G1 · CRL · <a href="https://ballchasing.com/replay/92172671-57e5-4fc7-ac1e-5c3c62f9ec25" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>1</td><td>1</td><td>1</td><td>302</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/42/#game-4">vs KSU</a></strong><div class="small muted">2026-02-15 · G4 · CCS · <a href="https://ballchasing.com/replay/077d055f-f238-43f9-afdb-9ed2bae795b4" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>1</td><td>0</td><td>198</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/42/#game-4">vs KSU</a></strong><div class="small muted">2026-02-15 · G4 · CCS · <a href="https://ballchasing.com/replay/077d055f-f238-43f9-afdb-9ed2bae795b4" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>1</td><td>0</td><td>198</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/42/#game-3">vs KSU</a></strong><div class="small muted">2026-02-15 · G3 · CCS · <a href="https://ballchasing.com/replay/4e4a4a20-8a30-413c-90a3-b8c8cb6b342d" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>0</td><td>3</td><td>380</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/42/#game-3">vs KSU</a></strong><div class="small muted">2026-02-15 · G3 · CCS · <a href="https://ballchasing.com/replay/4e4a4a20-8a30-413c-90a3-b8c8cb6b342d" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>0</td><td>3</td><td>380</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/42/#game-2">vs KSU</a></strong><div class="small muted">2026-02-15 · G2 · CCS · <a href="https://ballchasing.com/replay/caa1130f-1aad-418a-9c93-ca853ce5af97" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>1</td><td>1</td><td>328</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/42/#game-2">vs KSU</a></strong><div class="small muted">2026-02-15 · G2 · CCS · <a href="https://ballchasing.com/replay/caa1130f-1aad-418a-9c93-ca853ce5af97" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>0</td><td>1</td><td>1</td><td>328</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/42/#game-1">vs KSU</a></strong><div class="small muted">2026-02-15 · G1 · CCS · <a href="https://ballchasing.com/replay/d2f54276-8e24-452a-866c-179c399ce2b0" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>2</td><td>0</td><td>1</td><td>427</td><td><span class="pill pill-orange">★ YES</span><div class="small accolade-inline"><span title="Elite Disruptor">💥</span></div></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="1" data-categories="elite_disruptor "><td><strong><a href="/SHSU-RL-Records/series/42/#game-1">vs KSU</a></strong><div class="small muted">2026-02-15 · G1 · CCS · <a href="https://ballchasing.com/replay/d2f54276-8e24-452a-866c-179c399ce2b0" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-orange">Orange</span></td><td>2</td><td>0</td><td>1</td><td>427</td><td><span class="pill pill-orange">★ YES</span><div class="small accolade-inline"><span title="Elite Disruptor">💥</span></div></td></tr>
     
   </tbody></table></div>
+  <script>
+  (() => {
+    const rows = Array.from(document.querySelectorAll(".player-game-row"));
+    const kind = document.getElementById("game-log-kind");
+    const category = document.getElementById("game-log-category");
+    const count = document.getElementById("game-log-count");
+    function filter() {
+      let visible = 0;
+      for (const row of rows) {
+        const k = kind.value;
+        const qualifies = k === "all" || row.dataset[k] === "1";
+        const matches = !category.value || row.dataset.categories.split(" ").includes(category.value);
+        row.hidden = !(qualifies && matches);
+        if (!row.hidden) visible++;
+      }
+      count.textContent = `${visible} of ${rows.length} games`;
+    }
+    kind.addEventListener("change", filter);
+    category.addEventListener("change", filter);
+    filter();
+  })();
+  </script>
   
 </section>
 

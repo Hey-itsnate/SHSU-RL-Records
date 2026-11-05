@@ -186,39 +186,96 @@
 <section class="content-section">
   <div class="section-heading"><div><p class="eyebrow">REPLAY-BY-REPLAY</p><h2>Game log</h2></div></div>
   
+  <div class="player-game-filters" style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:15px">
+    <label>Game filter
+      <select id="game-log-kind" aria-label="Filter games">
+        <option value="all">All games</option>
+        <option value="highlight">Games with any highlight</option>
+        <option value="featured">Clips featuring this player</option>
+        <option value="standout">Any standout</option>
+      </select>
+    </label>
+    <label>Specific standout
+      <select id="game-log-category" aria-label="Filter by standout category">
+        <option value="">Any category</option>
+        
+        <option value="score_550">💯 550+ Score</option>
+        
+        <option value="hat_trick">⚽ Hat Trick</option>
+        
+        <option value="playmaker">🤝 Playmaker</option>
+        
+        <option value="offensive_engine">🔥 Offensive Engine</option>
+        
+        <option value="anchor">⚓ Anchor</option>
+        
+        <option value="defensive_problem">🚌 Defensive Problem</option>
+        
+        <option value="two_way">🛡️⚔️ Two-Way</option>
+        
+        <option value="elite_disruptor">💥 Elite Disruptor</option>
+        
+        <option value="all_around">👑 All-Around</option>
+        
+      </select>
+    </label>
+    <span id="game-log-count" class="small muted" aria-live="polite"></span>
+  </div>
   <div class="table-scroll"><table class="data-table game-log"><thead><tr><th>Date / Opponent</th><th>Team</th><th>G</th><th>A</th><th>S</th><th>Score</th><th>Standout</th></tr></thead><tbody>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/35/#game-6">vs NMSU Crimson</a></strong><div class="small muted">2026-10-17 · G6 · NECC · <a href="https://ballchasing.com/replay/706a408c-5884-4021-a917-52f827376d01" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>0</td><td>1</td><td>217</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/35/#game-6">vs NMSU Crimson</a></strong><div class="small muted">2026-10-17 · G6 · NECC · <a href="https://ballchasing.com/replay/706a408c-5884-4021-a917-52f827376d01" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>0</td><td>1</td><td>217</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/35/#game-5">vs NMSU Crimson</a></strong><div class="small muted">2026-10-17 · G5 · NECC · <a href="https://ballchasing.com/replay/807522b6-b9bd-416c-b740-f6e61039e15e" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>0</td><td>1</td><td>182</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/35/#game-5">vs NMSU Crimson</a></strong><div class="small muted">2026-10-17 · G5 · NECC · <a href="https://ballchasing.com/replay/807522b6-b9bd-416c-b740-f6e61039e15e" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>0</td><td>1</td><td>182</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/35/#game-4">vs NMSU Crimson</a></strong><div class="small muted">2026-10-17 · G4 · NECC · <a href="https://ballchasing.com/replay/417ae657-a52e-4cf1-b174-95fd9182b1fd" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>1</td><td>0</td><td>1</td><td>234</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/35/#game-4">vs NMSU Crimson</a></strong><div class="small muted">2026-10-17 · G4 · NECC · <a href="https://ballchasing.com/replay/417ae657-a52e-4cf1-b174-95fd9182b1fd" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>1</td><td>0</td><td>1</td><td>234</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/35/#game-3">vs NMSU Crimson</a></strong><div class="small muted">2026-10-17 · G3 · NECC · <a href="https://ballchasing.com/replay/d60554df-6d95-479c-9956-1706b714b7ed" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>0</td><td>2</td><td>196</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/35/#game-3">vs NMSU Crimson</a></strong><div class="small muted">2026-10-17 · G3 · NECC · <a href="https://ballchasing.com/replay/d60554df-6d95-479c-9956-1706b714b7ed" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>0</td><td>2</td><td>196</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/35/#game-2">vs NMSU Crimson</a></strong><div class="small muted">2026-10-17 · G2 · NECC · <a href="https://ballchasing.com/replay/d90a383f-d668-49b6-a97e-7c3cd4c67f37" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>1</td><td>1</td><td>1</td><td>305</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/35/#game-2">vs NMSU Crimson</a></strong><div class="small muted">2026-10-17 · G2 · NECC · <a href="https://ballchasing.com/replay/d90a383f-d668-49b6-a97e-7c3cd4c67f37" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>1</td><td>1</td><td>1</td><td>305</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/35/#game-1">vs NMSU Crimson</a></strong><div class="small muted">2026-10-17 · G1 · NECC · <a href="https://ballchasing.com/replay/33d8da23-935c-4637-80de-5ecedd2c5a27" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>0</td><td>0</td><td>134</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/35/#game-1">vs NMSU Crimson</a></strong><div class="small muted">2026-10-17 · G1 · NECC · <a href="https://ballchasing.com/replay/33d8da23-935c-4637-80de-5ecedd2c5a27" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>0</td><td>0</td><td>134</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/33/#game-3">vs Texas A&amp;M Bonfire</a></strong><div class="small muted">2026-09-23 · G3 · NECC · <a href="https://ballchasing.com/replay/363718b3-f79c-48d2-ab07-6c539b8f7b97" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>3</td><td>2</td><td>0</td><td>525</td><td><span class="pill pill-orange">★ YES</span><div class="small accolade-inline"><span title="Hat Trick">⚽</span><span title="Offensive Engine">🔥</span></div></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="1" data-categories="hat_trick offensive_engine "><td><strong><a href="/SHSU-RL-Records/series/33/#game-3">vs Texas A&amp;M Bonfire</a></strong><div class="small muted">2026-09-23 · G3 · NECC · <a href="https://ballchasing.com/replay/363718b3-f79c-48d2-ab07-6c539b8f7b97" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>3</td><td>2</td><td>0</td><td>525</td><td><span class="pill pill-orange">★ YES</span><div class="small accolade-inline"><span title="Hat Trick">⚽</span><span title="Offensive Engine">🔥</span></div></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/33/#game-2">vs Texas A&amp;M Bonfire</a></strong><div class="small muted">2026-09-23 · G2 · NECC · <a href="https://ballchasing.com/replay/4ba9dc2d-ed50-4a1b-a4aa-49a7a2823dde" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>2</td><td>0</td><td>238</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/33/#game-2">vs Texas A&amp;M Bonfire</a></strong><div class="small muted">2026-09-23 · G2 · NECC · <a href="https://ballchasing.com/replay/4ba9dc2d-ed50-4a1b-a4aa-49a7a2823dde" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>2</td><td>0</td><td>238</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/33/#game-1">vs Texas A&amp;M Bonfire</a></strong><div class="small muted">2026-09-23 · G1 · NECC · <a href="https://ballchasing.com/replay/a642fe2f-3ddc-4341-b3ff-4202c14fc005" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>1</td><td>0</td><td>0</td><td>212</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/33/#game-1">vs Texas A&amp;M Bonfire</a></strong><div class="small muted">2026-09-23 · G1 · NECC · <a href="https://ballchasing.com/replay/a642fe2f-3ddc-4341-b3ff-4202c14fc005" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>1</td><td>0</td><td>0</td><td>212</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/32/#game-3">vs LSU Purple</a></strong><div class="small muted">2026-09-23 · G3 · NECC · <a href="https://ballchasing.com/replay/1ad680d6-ad51-494e-ba61-cd28592a6d6d" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>0</td><td>2</td><td>269</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/32/#game-3">vs LSU Purple</a></strong><div class="small muted">2026-09-23 · G3 · NECC · <a href="https://ballchasing.com/replay/1ad680d6-ad51-494e-ba61-cd28592a6d6d" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>0</td><td>2</td><td>269</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/32/#game-2">vs LSU Purple</a></strong><div class="small muted">2026-09-23 · G2 · NECC · <a href="https://ballchasing.com/replay/dea0ad66-a593-488f-831a-fad70401d6de" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>0</td><td>1</td><td>165</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/32/#game-2">vs LSU Purple</a></strong><div class="small muted">2026-09-23 · G2 · NECC · <a href="https://ballchasing.com/replay/dea0ad66-a593-488f-831a-fad70401d6de" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>0</td><td>1</td><td>165</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/32/#game-1">vs LSU Purple</a></strong><div class="small muted">2026-09-23 · G1 · NECC · <a href="https://ballchasing.com/replay/7e4ebd99-7811-4834-b7cd-c00d195a43ab" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>1</td><td>0</td><td>0</td><td>246</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/32/#game-1">vs LSU Purple</a></strong><div class="small muted">2026-09-23 · G1 · NECC · <a href="https://ballchasing.com/replay/7e4ebd99-7811-4834-b7cd-c00d195a43ab" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>1</td><td>0</td><td>0</td><td>246</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/31/#game-3">vs GV Vikings Black</a></strong><div class="small muted">2026-09-23 · G3 · NECC · <a href="https://ballchasing.com/replay/5d781fb8-68a0-4054-9361-2d9e50db2f81" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>1</td><td>0</td><td>1</td><td>257</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/31/#game-3">vs GV Vikings Black</a></strong><div class="small muted">2026-09-23 · G3 · NECC · <a href="https://ballchasing.com/replay/5d781fb8-68a0-4054-9361-2d9e50db2f81" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>1</td><td>0</td><td>1</td><td>257</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/31/#game-2">vs GV Vikings Black</a></strong><div class="small muted">2026-09-23 · G2 · NECC · <a href="https://ballchasing.com/replay/f7e18c36-fab5-4bbd-b9a8-97b729628e3e" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>0</td><td>1</td><td>135</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/31/#game-2">vs GV Vikings Black</a></strong><div class="small muted">2026-09-23 · G2 · NECC · <a href="https://ballchasing.com/replay/f7e18c36-fab5-4bbd-b9a8-97b729628e3e" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>0</td><td>1</td><td>135</td><td><span class="muted">—</span></td></tr>
     
-    <tr><td><strong><a href="/SHSU-RL-Records/series/31/#game-1">vs GV Vikings Black</a></strong><div class="small muted">2026-09-23 · G1 · NECC · <a href="https://ballchasing.com/replay/b8f9d0ec-2778-4617-a63c-a5e71c260076" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>0</td><td>3</td><td>351</td><td><span class="muted">—</span></td></tr>
+    <tr class="player-game-row" data-highlight="0" data-featured="0" data-standout="0" data-categories=""><td><strong><a href="/SHSU-RL-Records/series/31/#game-1">vs GV Vikings Black</a></strong><div class="small muted">2026-09-23 · G1 · NECC · <a href="https://ballchasing.com/replay/b8f9d0ec-2778-4617-a63c-a5e71c260076" rel="noopener noreferrer" target="_blank">Replay ↗</a></div></td><td><span class="team-chip team-chip-black">Black</span></td><td>0</td><td>0</td><td>3</td><td>351</td><td><span class="muted">—</span></td></tr>
     
   </tbody></table></div>
+  <script>
+  (() => {
+    const rows = Array.from(document.querySelectorAll(".player-game-row"));
+    const kind = document.getElementById("game-log-kind");
+    const category = document.getElementById("game-log-category");
+    const count = document.getElementById("game-log-count");
+    function filter() {
+      let visible = 0;
+      for (const row of rows) {
+        const k = kind.value;
+        const qualifies = k === "all" || row.dataset[k] === "1";
+        const matches = !category.value || row.dataset.categories.split(" ").includes(category.value);
+        row.hidden = !(qualifies && matches);
+        if (!row.hidden) visible++;
+      }
+      count.textContent = `${visible} of ${rows.length} games`;
+    }
+    kind.addEventListener("change", filter);
+    category.addEventListener("change", filter);
+    filter();
+  })();
+  </script>
   
 </section>
 
