@@ -1,0 +1,247 @@
+#!/usr/bin/env python3
+"""Export the existing SHSU Flask record book as a GitHub Pages site.
+
+Run at the repository root:
+    python scripts/export_static.py
+    python scripts/export_static.py --base-path /MY-REPO-NAME/
+    python scripts/export_static.py --base-path /   # custom-domain/root hosting
+
+Generates docs/ only. Never modifies SQLite, imports, templates, or Flask routes.
+Requires the same Flask environment used by app.py.
+"""
+from __future__ import annotations
+
+import argparse
+from collections import Counter
+from html import unescape
+from html.parser import HTMLParser
+from pathlib import Path
+import re
+import shutil
+import sys
+from urllib.parse import urlsplit, unquote
+
+
+ROOT = Path(__file__).resolve().parent.parent
+OUTPUT = ROOT / "docs"
+TEMP = ROOT / ".docs-build-temp"
+
+# Existing seasonal player URLs return Flask redirects; rewrite links to the
+# already-supported canonical player profile pages instead.
+OLD_PLAYER_URL = re.compile(r"^/seasons/([^/]+)/players/([^/]+)/$")
+HTML_URL_ATTRIBUTE = re.compile(r"""(?P<start>\b(?:href|src|action|poster)\s*=\s*)(?P<quote>["'])(?P<url>[^"']*)(?P=quote)""", re.I)
+
+
+def normalize_base_path(raw: str) -> str:
+    if not raw.startswith("/") or raw.startswith("//") or "?" in raw or "#" in raw:
+        raise ValueError("--base-path must be a site path like /SHSU-RL-Records/ or /")
+    raw = "/" + raw.strip("/") + "/"
+    if raw == "//":
+        return "/"
+    if ".." in raw.split("/") or "\\" in raw:
+        raise ValueError("--base-path cannot contain '..' or backslashes")
+    return raw
+
+
+def canonicalize(path: str) -> str:
+    match = OLD_PLAYER_URL.fullmatch(path)
+    if match:
+        season_slug, player_slug = match.groups()
+        return f"/players/{player_slug}/{season_slug}/"
+    return path
+
+
+def rewrite_html(html: str, base: str) -> str:
+    """Prefix root-relative local URLs; preserve anchors and outside links."""
+    def replace(match):
+        original = match.group("url")
+        if not original.startswith("/") or original.startswith("//"):
+            return match.group(0)
+        parts = urlsplit(unescape(original))
+        path = canonicalize(parts.path)
+        if not path.startswith("/"):
+            return match.group(0)
+        rewritten = base.rstrip("/") + path
+        if parts.query:
+            rewritten += "?" + parts.query
+        if parts.fragment:
+            rewritten += "#" + parts.fragment
+        # Keep original HTML entity handling for URL params.
+        rewritten = rewritten.replace("&", "&amp;")
+        return f'{match.group("start")}{match.group("quote")}{rewritten}{match.group("quote")}'
+    return HTML_URL_ATTRIBUTE.sub(replace, html)
+
+
+class LinkCollector(HTMLParser):
+    """Gather browser navigations and static assets for broken-link checks."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.urls = []
+
+    def handle_starttag(self, tag, attrs):
+        for key, val in attrs:
+            if key in ("href", "src", "poster", "action") and val:
+                self.urls.append(val)
+
+
+def output_file(route: str, directory: Path) -> Path:
+    if not route.startswith("/") or not route.endswith("/") or "//" in route:
+        raise ValueError(f"Unexpected static route: {route!r}")
+    chunks = route.strip("/").split("/") if route != "/" else []
+    if any(chunk in {".", ".."} for chunk in chunks):
+        raise ValueError(f"Unsafe static route: {route!r}")
+    return directory.joinpath(*chunks, "index.html")
+
+
+def discover_routes(conn, repo):
+
+    routes = ["/", "/all-seasons/"]
+    all_time_team_slugs = [
+        row["slug"] for row in conn.execute(
+            "SELECT DISTINCT t.slug FROM team_seasons ts "
+            "JOIN teams t ON t.id=ts.team_id ORDER BY t.slug"
+        )
+    ]
+    for team_slug in all_time_team_slugs:
+        routes.append(f"/all-seasons/teams/{team_slug}/")
+    for season in repo.seasons(conn):
+        slug = season["slug"]
+        routes.append(f"/seasons/{slug}/")
+        for team in repo.team_seasons(conn, season["id"]):
+            routes.append(f"/seasons/{slug}/teams/{team['slug']}/")
+
+    players = repo.rows(conn.execute("SELECT id, slug FROM players ORDER BY slug"))
+    for p in players:
+        seasons = repo.player_seasons(conn, p["id"])
+        if not seasons:
+            continue
+        slug = p["slug"]
+        routes.extend((f"/players/{slug}/", f"/players/{slug}/all/"))
+        for season in seasons:
+            routes.append(f"/players/{slug}/{season['slug']}/")
+
+    for item in conn.execute("SELECT id FROM series ORDER BY id"):
+        routes.append(f"/series/{item['id']}/")
+    if len(routes) != len(set(routes)):
+        raise RuntimeError("Duplicate route discovered in database")
+    return routes
+
+
+def check_links(folder: Path, base: str):
+    """Fail before publishing if local pages reference absent static outputs."""
+    failures = []
+    count = 0
+    for page in folder.rglob("*.html"):
+        parser = LinkCollector()
+        parser.feed(page.read_text(encoding="utf-8"))
+        for raw in parser.urls:
+            value = unescape(raw)
+            if not value.startswith("/") or value.startswith("//"):
+                continue
+            parts = urlsplit(value)
+            if not parts.path.startswith(base):
+                failures.append(f"{page.relative_to(folder)}: invalid base path: {value}")
+                continue
+            rest = unquote(parts.path[len(base):])
+            # URL /repo-name/ -> docs/index.html
+            target = folder / rest
+            file = target / "index.html" if rest == "" or rest.endswith("/") else target
+            if not file.is_file():
+                failures.append(f"{page.relative_to(folder)}: missing {value}")
+            count += 1
+    if failures:
+        preview = "\n  ".join(failures[:25])
+        extra = f"\n  ... and {len(failures)-25} more" if len(failures) > 25 else ""
+        raise RuntimeError(f"{len(failures)} broken internal references:\n  {preview}{extra}")
+    return count
+
+
+def export(base: str) -> None:
+    # Only imported after setting the repository root on the Python search path.
+    sys.path.insert(0, str(ROOT))
+    import app as website
+    import repository as repo
+
+    asset_dir = ROOT / "static"
+    required = ("css/style.css", "js/main.js")
+    missing = [name for name in required if not (asset_dir / name).is_file()]
+    if missing:
+        raise FileNotFoundError(
+            "Missing site assets in the main static/ folder: " + ", ".join(missing)
+        )
+
+    db_path = Path(website.app.config["DATABASE"])
+    with repo.open_database(db_path) as conn:
+        routes = discover_routes(conn, repo)
+
+    if TEMP.exists():
+        shutil.rmtree(TEMP)
+    TEMP.mkdir(parents=True)
+
+    try:
+        shutil.copytree(asset_dir, TEMP / "static")
+        # Safety: never publish Python, SQLite databases or credentials as assets.
+        forbidden = {".sqlite", ".sqlite3", ".db", ".py", ".env", ".pem", ".key"}
+        sensitive = [
+            x for x in (TEMP / "static").rglob("*")
+            if x.is_file() and (x.suffix.lower() in forbidden or x.name.lower() in {".env", ".env.local"})
+        ]
+        if sensitive:
+            raise RuntimeError("Refusing to publish sensitive files in static/: " + ", ".join(str(x) for x in sensitive))
+        (TEMP / ".nojekyll").touch()
+
+        client = website.app.test_client()
+        for route in routes:
+            response = client.get(route, follow_redirects=False)
+            if response.status_code != 200:
+                raise RuntimeError(f"Flask returned HTTP {response.status_code} for {route}")
+            html = response.get_data(as_text=True)
+            if "<html" not in html.lower():
+                raise RuntimeError(f"No HTML document returned for {route}")
+            rendered = rewrite_html(html, base)
+            destination = output_file(route, TEMP)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_text(rendered, encoding="utf-8")
+
+        checked = check_links(TEMP, base)
+        # Keep the prior publish intact until *all* routes and links pass.
+        backup = ROOT / ".docs-previous"
+        if backup.exists():
+            shutil.rmtree(backup)
+        if OUTPUT.exists():
+            OUTPUT.rename(backup)
+        try:
+            TEMP.rename(OUTPUT)
+        except OSError:
+            if backup.exists() and not OUTPUT.exists():
+                backup.rename(OUTPUT)
+            raise
+        if backup.exists():
+            shutil.rmtree(backup)
+
+        print(f"SUCCESS: generated {len(routes)} HTML pages in docs/")
+        print(f"Validated {checked} local links and assets.")
+        print(f"GitHub Pages base path: {base}")
+        print("No SQLite database was copied into docs/.")
+        print("Next: git add docs scripts/export_static.py && git commit && git push")
+    finally:
+        if TEMP.exists():
+            shutil.rmtree(TEMP)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--base-path", default="/SHSU-RL-Records/",
+        help="GitHub Pages project path (default: /SHSU-RL-Records/). Use / for custom domains.",
+    )
+    args = parser.parse_args()
+    try:
+        export(normalize_base_path(args.base_path))
+    except Exception as exc:
+        print(f"EXPORT ERROR: {exc}", file=sys.stderr)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

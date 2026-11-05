@@ -21,6 +21,12 @@
         <a class="nav-link {{ 'active' if active_page == 'home' else '' }}" href="{{ url_for('home') }}">
           <span aria-hidden="true">⌂</span> Overview
         </a>
+
+        <div class="nav-label nav-label--spaced">CAREER RECORDS</div>
+        <a class="nav-link {{ 'active' if active_page == 'all_seasons' else '' }}"
+           href="{{ url_for('all_seasons_page') }}">
+          <span aria-hidden="true">🏆</span> All Seasons
+        </a>
         <div class="nav-label nav-label--spaced">SEASON ARCHIVE</div>
         {% for nav_season in site_seasons %}
         <a class="nav-link {{ 'active' if active_page == 'seasons' and season is defined and season is not none and season.slug == nav_season.slug else '' }}"
@@ -28,6 +34,11 @@
           <span aria-hidden="true">▦</span> {{ nav_season.name }}
         </a>
         {% endfor %}
+        <div class="nav-label nav-label--spaced">REFERENCE</div>
+        <a class="nav-link {{ 'active' if active_page == 'methodology' else '' }}"
+           href="{{ url_for('methodology_page') }}">
+          <span aria-hidden="true">ⓘ</span> Methodology &amp; Insights
+        </a>
       </div>
       <div class="sidebar-footer">
         <span class="status-dot"></span>

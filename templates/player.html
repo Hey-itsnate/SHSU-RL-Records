@@ -5,6 +5,8 @@
   <a href="{{ url_for('home') }}">Archive</a><span>/</span>
   {% if season %}
     <a href="{{ url_for('season_page', season_slug=season.slug) }}">{{ season.name }}</a><span>/</span>
+  {% else %}
+    <a href="{{ url_for('all_seasons_page') }}">All Seasons</a><span>/</span>
   {% endif %}
   <span>{{ player.display_name }}</span>
 </nav>
@@ -46,10 +48,18 @@
     </a>
   </nav>
   <p class="footnote">Stats, standout rates, personal records, and game logs are recalculated for the selected period.</p>
+  <a class="text-link" href="{{ url_for('all_seasons_page') }}#player-stats">🏆 View all-time player leaderboard →</a>
 </section>
 
 <section class="content-section">
-  <div class="section-heading"><div><p class="eyebrow">{{ season_label | upper }} PERFORMANCE</p><h2>Player statistics</h2></div></div>
+  <div class="section-heading">
+    <div><p class="eyebrow">{{ season_label | upper }} PERFORMANCE</p><h2>Player statistics</h2></div>
+    {% if season %}
+      <a class="text-link" href="{{ url_for('season_page', season_slug=season.slug) }}#player-stats">Compare season player stats →</a>
+    {% else %}
+      <a class="text-link" href="{{ url_for('all_seasons_page') }}#player-stats">Compare all-time player stats →</a>
+    {% endif %}
+  </div>
   {% if summary %}
   <div class="metric-grid">
     {% for item in [('Goals','goals'),('Assists','assists'),('Saves','saves')] %}
@@ -88,6 +98,7 @@
     {% endfor %}
   </div>
   <p class="footnote">Standout totals count qualifying player-games once. A game can satisfy more than one category.</p>
+  <p class="footnote"><a class="text-link" href="{{ url_for('methodology_page') }}">See Methodology &amp; Insights for more details about Standouts →</a></p>
 </section>
 {% if team_splits|length > 1 %}
 <section class="content-section">

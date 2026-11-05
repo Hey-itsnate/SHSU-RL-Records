@@ -1,0 +1,149 @@
+SHSU ROCKET LEAGUE — OBSERVED STANDOUT FREQUENCY
+========================================================================
+Scope: all eligible 3v3 player-games in the scanned Ballchasing exports.
+Includes BOTH SHSU and opposing players (one game = six player slots).
+This is a descriptive sample of recorded SHSU matches, not a random
+sample of every collegiate/Rocket League match.
+
+SAMPLE / DATA QUALITY
+------------------------------------------------------------------------
+CSV root: G:\Coding-GameDev\CodeProjects\CodeProjects\VSCode\SHSU-RL-Records\data\replays
+Read-only player-alias database: G:\Coding-GameDev\CodeProjects\CodeProjects\VSCode\SHSU-RL-Records\shsu_records.sqlite3
+CSVs found: 63
+Ballchasing players-games CSVs recognized: 63
+Other CSVs ignored: 0
+Valid replay occurrences across CSVs: 239
+Duplicate replay copies removed: 7
+Replay IDs excluded for conflicting exports: 0
+Unique eligible complete 3v3 replays analyzed: 232
+Total player-game observations: 1,392
+SHSU player-game observations: 696
+Opponent player-game observations: 696
+Invalid / rejected entries: 0
+
+OVERALL STANDOUT FREQUENCY
+------------------------------------------------------------------------
+Any standout (all players): 310 / 1,392 = 22.27%
+Any standout (SHSU):        154 / 696 = 22.13%
+Any standout (opponents):   156 / 696 = 22.41%
+Games with 1+ standout player: 165 / 232 = 71.12%
+Games with 0 standout players: 67 / 232 = 28.88%
+Average standout players per game: 1.336
+Total awarded categories (overlapping): 622
+
+NUMBER OF STANDOUT PLAYERS IN EACH REPLAY (0 THROUGH 6)
+------------------------------------------------------------------------
+A player with several accolades counts as ONE standout player here.
+  0 players:     67 games ( 28.88%)
+  1 player :     73 games ( 31.47%)
+  2 players:     53 games ( 22.84%)
+  3 players:     28 games ( 12.07%)
+  4 players:      9 games (  3.88%)
+  5 players:      1 games (  0.43%)
+  6 players:      1 games (  0.43%)
+  TOTAL:        232 games
+
+SHSU / OPPONENT STANDOUT PLAYER DISTRIBUTIONS (0 THROUGH 3)
+------------------------------------------------------------------------
+                  SHSU games     Opponent games
+  0 of 3 players:     125 ( 53.88%)      119 ( 51.29%)
+  1 of 3 players:      67 ( 28.88%)       77 ( 33.19%)
+  2 of 3 players:      33 ( 14.22%)       29 ( 12.50%)
+  3 of 3 players:       7 (  3.02%)        7 (  3.02%)
+
+CATEGORY-BY-CATEGORY OBSERVED FREQUENCY
+--------------------------------------------------------------------------------------------------------
+Each percentage uses PLAYER-GAME observations, not number of matches.
+Category                 All  All rate   SHSU    SHSU %    Opp     Opp %  Single-only
+--------------------------------------------------------------------------------------------------------
+550+ Score               189    13.58%     89    12.79%    100    14.37%           24
+Hat Trick                 77     5.53%     43     6.18%     34     4.89%           11
+Playmaker                 43     3.09%     27     3.88%     16     2.30%           17
+Offensive Engine          37     2.66%     19     2.73%     18     2.59%           13
+Anchor                    32     2.30%      9     1.29%     23     3.30%            8
+Defensive Problem         74     5.32%     32     4.60%     42     6.03%           15
+Two-Way                   97     6.97%     42     6.03%     55     7.90%           25
+Elite Disruptor           30     2.16%     15     2.16%     15     2.16%           21
+All-Around                43     3.09%     18     2.59%     25     3.59%            0
+
+SINGLE-CATEGORY VS MULTI-CATEGORY PLAYER-GAMES
+------------------------------------------------------------------------
+A 'single-only' standout is a player-game meeting EXACTLY ONE of
+the nine category rules (not one category across the entire lobby).
+Standout player-games with exactly ONE category: 134 / 1,392 = 9.63%
+Standout player-games with 2+ categories:       176 / 1,392 = 12.64%
+Total qualifying player-games (single + multi): 310
+  SHSU single-only:     71
+  Opponent single-only: 63
+
+  Unique single-only awards by category (these sum to the single-only total):
+  Category                   SHSU     Opp   Total
+  550+ Score                   12      12      24
+  Hat Trick                     7       4      11
+  Playmaker                    12       5      17
+  Offensive Engine              6       7      13
+  Anchor                        2       6       8
+  Defensive Problem             8       7      15
+  Two-Way                      12      13      25
+  Elite Disruptor              12       9      21
+  All-Around                    0       0       0
+
+NUMBER OF CATEGORY AWARDS ON ONE PLAYER-GAME
+------------------------------------------------------------------------
+If a player meets 3 criteria in one game, that counts as 3 awards
+but only 1 qualifying player-game.
+  0 categories:  1,082 player-games (77.73%)
+  1 categories:    134 player-games (9.63%)
+  2 categories:    106 player-games (7.61%)
+  3 categories:     29 player-games (2.08%)
+  4 categories:     19 player-games (1.36%)
+  5 categories:     19 player-games (1.36%)
+  6 categories:      3 player-games (0.22%)
+  7 categories:      0 player-games (0.00%)
+  8 categories:      0 player-games (0.00%)
+  9 categories:      0 player-games (0.00%)
+
+CATEGORY AWARDS PER FULL SIX-PLAYER LOBBY
+------------------------------------------------------------------------
+Games with exactly ONE category award total: 32 / 232 = 13.79%
+Unlike one standout player, this requires only one accolade anywhere
+in the lobby (one player earning 2 accolades does NOT qualify).
+
+CRITERIA (EXACT SAME THRESHOLDS AS SHSU RECORD BOOK)
+------------------------------------------------------------------------
+  550+ Score             Score >= 550
+  Hat Trick              Goals >= 3
+  Playmaker              Assists >= 3
+  Offensive Engine       Goals >= 2 AND assists >= 2
+  Anchor                 Saves >= 5
+  Defensive Problem      Saves >= 4 AND (goals + assists >= 1 OR demos >= 3)
+  Two-Way                Saves >= 3 AND goals + assists >= 2
+  Elite Disruptor        Demos >= 4 AND goals + assists + saves >= 3
+  All-Around             Goals + assists + saves >= 7
+
+METHODOLOGY / LIMITATIONS
+------------------------------------------------------------------------
+1. Every replay ID is counted once, even if present in many CSVs.
+2. Only complete six-player games with 3 SHSU and 3 opponents are included.
+3. Games are classified using SHSU player aliases from the read-only
+   SQLite database when available, then reliable CSV team labels.
+4. Each player can qualify for multiple categories, but counts once
+   toward 'Any Standout' and 0-6 per-game counts.
+5. Rates describe these archived matches; they are not universal
+   odds, independent-player probabilities, or skill-adjusted estimates.
+6. Unplayed forfeits have no six-player stats, so are not sampled.
+7. Invalid/replay-conflicting exports are excluded and shown below.
+
+DATA-QUALITY EXCLUSIONS
+------------------------------------------------------------------------
+  None.
+
+NON-FATAL IDENTITY WARNINGS
+------------------------------------------------------------------------
+Total identity warnings (across CSV copies): 4
+  * fall-2026/black/NECC/Dirty/0-0-match-vs-texas-a-m-bonfire-07jlmf95pp-players-games.csv | a642fe2f-3ddc-4341-b3ff-4202c14fc005: SHSU team labels inconsistent; identified by 3 known player aliases
+  * fall-2026/black/NECC/Dirty/0-0-match-vs-texas-a-m-bonfire-07jlmf95pp-players-games.csv | 4ba9dc2d-ed50-4a1b-a4aa-49a7a2823dde: SHSU team labels inconsistent; identified by 3 known player aliases
+  * fall-2026/black/NECC/Dirty/0-0-match-vs-texas-a-m-bonfire-07jlmf95pp-players-games.csv | 363718b3-f79c-48d2-ab07-6c539b8f7b97: SHSU team labels inconsistent; identified by 3 known player aliases
+  * spring-2026/CCS/Dirty/shsu-v-odu-ccs-spring-2026-w1-stngu0c7o9-players-games.csv | d39f1bf7-1f1f-4f5e-9fd5-4d581189efca: SHSU team labels inconsistent; identified by 3 known player aliases
+
+END OF REPORT

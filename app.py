@@ -46,6 +46,14 @@ def home():
     return render_template("index.html", active_page="home")
 
 
+
+@app.route("/methodology/")
+def methodology_page():
+    """Static snapshot of standout rarity from archived six-player replays."""
+    return render_template(
+        "methodology.html", active_page="methodology",
+    )
+
 @app.route("/seasons/<season_slug>/")
 def season_page(season_slug):
     current = lookup_season(season_slug)
@@ -61,14 +69,276 @@ def season_page(season_slug):
 
     appearances = repo.individual_games(conn, current["id"])
     leaders = repo.leaderboard(conn, current["id"])
+
+    # Season-wide player statistics: one row per SHSU player, across all
+    # roster appearances including substitutions. Reuse exactly the same
+    # summary function as the individual player profiles.
+    player_stats = []
+    for leader in leaders:
+        player_games = repo.player_games(conn, current["id"], leader["player_id"])
+        summary = repo.player_summary(player_games)
+        played_teams = {game["team_slug"] for game in player_games}
+        rostered_teams = {
+            team["slug"] for team in team_list
+            if any(member["id"] == leader["player_id"] for member in team["roster"])
+        }
+        team_names = [
+            team["name"] for team in team_list
+            if team["slug"] in played_teams | rostered_teams
+        ]
+        player_stats.append({
+            "slug": leader["slug"],
+            "display_name": leader["display_name"],
+            "team_names": ", ".join(team_names) or "—",
+            "summary": summary,
+        })
+    player_stats.sort(
+        key=lambda row: (
+            -(row["summary"]["games"] if row["summary"] else 0),
+            row["display_name"].casefold(),
+        )
+    )
     return render_template(
         "season.html", active_page="seasons", season=current,
         teams=team_list, team_records=repo.records_for_games(all_team_games),
         individual_records=repo.individual_records(appearances),
         personal_bests=repo.personal_best_scores(appearances),
-        leaders=leaders, total_series=sum(t["series_count"] for t in team_list),
+        leaders=leaders, player_stats=player_stats,
+        total_series=sum(t["series_count"] for t in team_list),
         games_imported=len(all_team_games), appearances=len(appearances),
         standout_count=sum(g["is_standout"] for g in appearances),
+    )
+
+
+def _labelled_games(games, season_data):
+    """Attach historical season labels without modifying repository rows."""
+    return [
+        {**game, "season_name": season_data["name"],
+         "season_slug": season_data["slug"]}
+        for game in games
+    ]
+
+
+@app.route("/all-seasons/")
+def all_seasons_page():
+    """All recorded seasons; SHSU appearances only, excluding unplayed forfeits."""
+    conn = db()
+    history = repo.seasons(conn)
+    all_team_games = []
+    appearances = []
+    rostered_players = {}
+    team_data = {}
+
+    for historical_season in history:
+        sid = historical_season["id"]
+        all_team_games.extend(_labelled_games(
+            repo.team_game_rows(conn, sid), historical_season
+        ))
+        appearances.extend(_labelled_games(
+            repo.individual_games(conn, sid), historical_season
+        ))
+        for leader in repo.leaderboard(conn, sid):
+            rostered_players[leader["player_id"]] = {
+                "player_id": leader["player_id"], "slug": leader["slug"],
+                "display_name": leader["display_name"]
+            }
+        for roster_team in repo.team_seasons(conn, sid):
+            key = roster_team["slug"]
+            item = team_data.setdefault(key, {
+                "slug": key, "name": roster_team["name"],
+                "series_count": 0, "roster_ids": set(), "games": []
+            })
+            item["series_count"] += len(repo.team_series(conn, roster_team["id"]))
+            item["roster_ids"].update(
+                member["id"] for member in repo.roster(conn, roster_team["id"])
+            )
+            item["games"].extend(
+                _labelled_games(
+                    repo.team_game_rows(conn, sid, roster_team["id"]),
+                    historical_season,
+                )
+            )
+
+    # Include players who played even if their roster membership was not
+    # registered (e.g. one-off substitutes).
+    for appearance in appearances:
+        rostered_players.setdefault(appearance["player_id"], {
+            "player_id": appearance["player_id"],
+            "slug": appearance["player_slug"],
+            "display_name": appearance["display_name"],
+        })
+        if appearance["team_slug"] in team_data:
+            team_data[appearance["team_slug"]]["roster_ids"].add(
+                appearance["player_id"]
+            )
+
+    team_list = []
+    for item in sorted(
+        team_data.values(),
+        key=lambda t: ({"orange": 0, "white": 1, "black": 2}.get(t["slug"], 99), t["name"]),
+    ):
+        item["averages"] = repo.aggregate_games(item["games"])
+        item["records"] = repo.records_for_games(item["games"])
+        item["roster"] = [{"id": pid} for pid in item["roster_ids"]]
+        team_list.append(item)
+
+    # Exactly one player row across all seasons, including substitutes.
+    # Reuse the same per-game summary as each player's existing /all/ profile.
+    leaders = []
+    player_stats = []
+    for identity in rostered_players.values():
+        player_games = repo.player_games(conn, None, identity["player_id"])
+        summary = repo.player_summary(player_games)
+        accolades = {
+            cat["field"]: (summary["accolades"][i]["count"] if summary else 0)
+            for i, cat in enumerate(repo.STANDOUT_TYPES)
+        }
+        leaders.append({
+            **identity,
+            "games_played": summary["games"] if summary else 0,
+            "standout_games": summary["standouts"] if summary else 0,
+            "standout_pct": summary["standout_pct"] if summary else None,
+            **accolades,
+            "season_names": ", ".join(
+                season["name"] for season in reversed(repo.player_seasons(
+                    conn, identity["player_id"]
+                ))
+            ),
+        })
+        affiliations = repo.player_affiliations(conn, identity["player_id"])
+        player_stats.append({
+            "slug": identity["slug"],
+            "display_name": identity["display_name"],
+            "team_names": ", ".join(
+                f'{team["name"]} · {team["season_name"]}'
+                for team in reversed(affiliations)
+            ) or "—",
+            "summary": summary,
+        })
+    leaders.sort(key=lambda p: (
+        not bool(p["games_played"]),
+        -(p["standout_pct"] or 0),
+        -p["standout_games"],
+        p["display_name"].casefold(),
+    ))
+    player_stats.sort(key=lambda p: (
+        -(p["summary"]["games"] if p["summary"] else 0),
+        p["display_name"].casefold(),
+    ))
+
+    # Reuse the four-tab season template, preserving identical sorting/filtering.
+    return render_template(
+        "season.html", active_page="all_seasons", all_time=True,
+        season={"name": "All Seasons", "slug": "all"},
+        recorded_seasons=list(reversed(history)),
+        teams=team_list, team_records=repo.records_for_games(all_team_games),
+        individual_records=repo.individual_records(appearances),
+        personal_bests=repo.personal_best_scores(appearances),
+        leaders=leaders, player_stats=player_stats,
+        total_series=sum(team["series_count"] for team in team_list),
+        games_imported=len(all_team_games), appearances=len(appearances),
+        standout_count=sum(game["is_standout"] for game in appearances),
+    )
+
+
+def _combined_team_records(seasonal_records):
+    """Add official, played, and forfeit W/L without counting forfeits as play."""
+    fields = (
+        "series", "wins", "losses", "ties",
+        "official_wins", "official_losses",
+        "played_wins", "played_losses",
+        "forfeit_wins", "forfeit_losses",
+    )
+
+    def empty(competition):
+        return {"competition": competition, **{field: 0 for field in fields}}
+
+    total = empty("All competitions")
+    grouped = {}
+    for season_record in seasonal_records:
+        for field in fields:
+            total[field] += season_record["total"][field]
+        for comp in season_record["by_competition"]:
+            target = grouped.setdefault(comp["competition"], empty(comp["competition"]))
+            for field in fields:
+                target[field] += comp[field]
+
+    return {
+        "total": total,
+        "by_competition": [
+            grouped[name] for name in sorted(grouped, key=lambda name: (
+                {"NECC": 0, "CCS": 1, "CRL": 2, "PCL": 3}.get(name.upper(), 99),
+                name.casefold(),
+            ))
+        ],
+    }
+
+
+@app.route("/all-seasons/teams/<team_slug>/")
+def all_seasons_team_page(team_slug):
+    """One historical SHSU team page per color, with season-labelled records."""
+    conn = db()
+    periods = []
+    games = []
+    results = []
+    season_records = []
+    members_by_id = {}
+    for historical_season in repo.seasons(conn):
+        team = repo.team_season(conn, historical_season["id"], team_slug)
+        if not team:
+            continue
+        periods.append({"slug": historical_season["slug"], "name": historical_season["name"]})
+        games.extend(_labelled_games(
+            repo.team_game_rows(conn, historical_season["id"], team["id"]),
+            historical_season,
+        ))
+        results.extend(_labelled_games(
+            repo.team_series(conn, team["id"]), historical_season
+        ))
+        season_records.append(repo.team_season_records(conn, team["id"]))
+        for member in repo.roster(conn, team["id"]):
+            members_by_id.setdefault(member["id"], {
+                **member, "seasons": set(),
+            })["seasons"].add(historical_season["name"])
+        # Substitute appearances are relevant even without a roster membership.
+        for appearance in repo.individual_games(conn, historical_season["id"]):
+            if appearance["team_slug"] != team_slug:
+                continue
+            pid = appearance["player_id"]
+            members_by_id.setdefault(pid, {
+                "id": pid, "slug": appearance["player_slug"],
+                "display_name": appearance["display_name"],
+                "role": "substitute", "discord": None, "seasons": set(),
+            })["seasons"].add(historical_season["name"])
+
+    if not periods:
+        abort(404, description="That team has no recorded history.")
+
+    members = []
+    for member in members_by_id.values():
+        member["summary"] = repo.player_summary([
+            g for g in repo.player_games(conn, None, member["id"])
+            if g["team_slug"] == team_slug
+        ])
+        member["season_names"] = ", ".join(
+            name for name in reversed([s["name"] for s in periods])
+            if name in member["seasons"]
+        )
+        members.append(member)
+    members.sort(key=lambda member: member["display_name"].casefold())
+    results.sort(key=lambda result: (
+        result["played_on"] or "", result["id"]
+    ), reverse=True)
+    historical_team = {"slug": team_slug, "name": team["name"]}
+
+    return render_template(
+        "team.html", active_page="all_seasons", all_time=True,
+        season={"name": "All Seasons", "slug": "all"},
+        periods=periods, team=historical_team,
+        averages=repo.aggregate_games(games),
+        season_records=_combined_team_records(season_records),
+        records=repo.records_for_games(games), members=members,
+        series_list=results, games_imported=len(games),
     )
 
 
@@ -161,7 +431,7 @@ def render_player_profile(player_slug, view_slug):
     ))
 
     return render_template(
-        "player.html", active_page="seasons", player=p,
+        "player.html", active_page="all_seasons" if current is None else "seasons", player=p,
         season=current, season_label=season_label, selected_slug=selected_slug,
         available_seasons=available_seasons, affiliations=affiliations,
         summary=repo.player_summary(games),

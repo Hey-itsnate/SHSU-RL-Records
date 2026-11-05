@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101218">
+  <meta name="description" content="SHSU Rocket League season records, teams, players, and standout performances.">
+  <title>All Seasons · SHSU RL Records</title>
+  <link rel="stylesheet" href="/SHSU-RL-Records/static/css/style.css">
+  <script defer src="/SHSU-RL-Records/static/js/main.js"></script>
+</head>
+<body>
+  <div class="site-shell">
+    <aside class="sidebar" id="site-sidebar" aria-label="Main navigation">
+      <a class="brand" href="/SHSU-RL-Records/" aria-label="SHSU Rocket League Records home">
+        <span class="brand-mark" aria-hidden="true">S<span>★</span></span>
+        <span class="brand-copy"><strong>SHSU <span>RL</span></strong><small>RECORD BOOK</small></span>
+      </a>
+      <div class="nav-section">
+        <div class="nav-label">EXPLORE</div>
+        <a class="nav-link " href="/SHSU-RL-Records/">
+          <span aria-hidden="true">⌂</span> Overview
+        </a>
+
+        <div class="nav-label nav-label--spaced">CAREER RECORDS</div>
+        <a class="nav-link active"
+           href="/SHSU-RL-Records/all-seasons/">
+          <span aria-hidden="true">🏆</span> All Seasons
+        </a>
+        <div class="nav-label nav-label--spaced">SEASON ARCHIVE</div>
+        
+        <a class="nav-link "
+           href="/SHSU-RL-Records/seasons/spring-2026/">
+          <span aria-hidden="true">▦</span> Spring 2026
+        </a>
+        
+        <a class="nav-link "
+           href="/SHSU-RL-Records/seasons/fall-2026/">
+          <span aria-hidden="true">▦</span> Fall 2026
+        </a>
+        
+        <div class="nav-label nav-label--spaced">REFERENCE</div>
+        <a class="nav-link "
+           href="/SHSU-RL-Records/methodology/">
+          <span aria-hidden="true">ⓘ</span> Methodology &amp; Insights
+        </a>
+      </div>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span>
+        <div><strong>SHSU Esports</strong><small>Community records archive</small></div>
+      </div>
+    </aside>
+    <div class="main-shell">
+      <header class="topbar">
+        <button class="menu-toggle" type="button" id="menu-toggle" aria-label="Toggle navigation"
+                aria-controls="site-sidebar" aria-expanded="false">☰</button>
+        <a class="topbar-brand" href="/SHSU-RL-Records/">SHSU <b>RL</b> <span>/ RECORDS</span></a>
+        <div class="topbar-meta"><span class="live-dot"></span> COMMUNITY ARCHIVE</div>
+      </header>
+      <main id="main" class="page-content">
+        
+<style>
+  /* Season Player Stats: safely scoped to this page. */
+  .historical-record { margin:5px 0 9px; }
+  .historical-record .record-season-label { display:block; margin:0 0 2px; color:var(--muted); font-size:11px; font-weight:750; }
+  .historical-record .holder-line { margin:0; }
+  .player-stats-controls { display:flex; flex-wrap:wrap; gap:14px; margin:0 0 13px; }
+  .player-stats-controls label { display:flex; flex-direction:column; gap:5px; color:var(--muted); font-size:11px; font-weight:750; }
+  .player-stats-controls select { min-width:140px; max-width:100%; padding:9px 12px; color:var(--text); border:1px solid var(--line); border-radius:9px; background:var(--panel-2); font:inherit; font-size:12px; cursor:pointer; }
+  .player-stats-description { margin-bottom:14px; }
+  .season-player-stats-table { min-width:1200px; }
+  .season-player-stats-table th:not(:first-child):not(:nth-child(2)),
+  .season-player-stats-table td:not(:first-child):not(:nth-child(2)) { text-align:right; font-variant-numeric:tabular-nums; }
+  .season-player-stats-table td:nth-child(1) { white-space:nowrap; }
+  .season-player-stats-table td:nth-child(2) { min-width:105px; }
+  .season-player-stats-table td:last-child { color:var(--orange-strong); font-weight:750; }
+  .season-player-stats-table tr[hidden] { display:none !important; }
+  .season-player-stats-table .player-stats-sort-button {
+    appearance:none; display:inline-flex; align-items:center; gap:6px;
+    width:100%; padding:0; background:transparent; border:0; border-radius:0;
+    color:inherit; font:inherit; font-weight:inherit; font-size:inherit;
+    text-transform:inherit; letter-spacing:inherit; text-align:inherit;
+    cursor:pointer; white-space:nowrap;
+  }
+  .season-player-stats-table th:not(:first-child):not(:nth-child(2)) .player-stats-sort-button { justify-content:flex-end; }
+  .season-player-stats-table .player-stats-sort-button:hover,
+  .season-player-stats-table .player-stats-sort-button:focus-visible,
+  .season-player-stats-table th[aria-sort="ascending"] .player-stats-sort-button,
+  .season-player-stats-table th[aria-sort="descending"] .player-stats-sort-button { color:var(--orange-strong); }
+  .season-player-stats-table .player-stats-sort-arrow { display:inline-block; min-width:9px; font-size:8px; line-height:1; }
+</style>
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/SHSU-RL-Records/">Archive</a><span>/</span><span>All Seasons</span></nav>
+<section class="page-hero compact-hero">
+  <div class="eyebrow"><span class="eyebrow-dot"></span> ALL-SEASONS RECORD BOOK</div>
+  <div class="page-hero-row">
+    <div><h1>All Seasons<span class="accent">.</span></h1><p>Career records and standout performances across every archived season. Spring 2026 onward.</p></div>
+    <div class="season-tag">CAREER <strong>🏆</strong></div>
+  </div>
+  <div class="stat-strip">
+    <div><strong>3</strong><span>Unique rosters</span></div>
+    <div><strong>64</strong><span>Recorded Series</span></div>
+    <div><strong>232</strong><span>Complete Game Stats</span></div>
+    <div><strong>154</strong><span>Standout Games</span></div>
+  </div>
+</section>
+
+<section class="content-section">
+  <div class="section-heading"><div><p class="eyebrow">RECORDED HISTORY</p><h2>Record Book</h2></div></div>
+  <div class="tabbar" role="tablist" aria-label="All Seasons record categories" data-tabs>
+    <button type="button" class="tab active" id="tab-teams" role="tab" aria-controls="panel-teams" aria-selected="true" data-tab="teams">🏆 Team Records</button>
+    <button type="button" class="tab" id="tab-individuals" role="tab" aria-controls="panel-individuals" aria-selected="false" data-tab="individuals">🎯 Individual Records</button>
+    <button type="button" class="tab" id="tab-standouts" role="tab" aria-controls="panel-standouts" aria-selected="false" data-tab="standouts">⭐ Standouts</button>
+    <button type="button" class="tab" id="tab-player-stats" role="tab" aria-controls="panel-player-stats" aria-selected="false" data-tab="player-stats">📊 Player Stats</button>
+  </div>
+
+  <div class="tab-panel" id="panel-teams" role="tabpanel" aria-labelledby="tab-teams" data-panel="teams">
+    <div class="subsection-heading"><h3>Teams across recorded seasons</h3><p>Select a roster to view combined career-era statistics, players, records, and results.</p></div>
+    <div class="team-tiles">
+      
+      <a class="team-tile team-orange" href="/SHSU-RL-Records/all-seasons/teams/orange/">
+        <div class="team-tile-top"><span class="team-bullet"></span><span class="muted small">SHSU / ORANGE</span><span class="tile-arrow">↗</span></div>
+        <h3>Orange</h3>
+        <p>5 historical players · 48 recorded series</p>
+        <div class="tile-metric"><strong>2.60</strong><span>Goals / game</span></div>
+      </a>
+      
+      <a class="team-tile team-white" href="/SHSU-RL-Records/all-seasons/teams/white/">
+        <div class="team-tile-top"><span class="team-bullet"></span><span class="muted small">SHSU / WHITE</span><span class="tile-arrow">↗</span></div>
+        <h3>White</h3>
+        <p>4 historical players · 8 recorded series</p>
+        <div class="tile-metric"><strong>3.28</strong><span>Goals / game</span></div>
+      </a>
+      
+      <a class="team-tile team-black" href="/SHSU-RL-Records/all-seasons/teams/black/">
+        <div class="team-tile-top"><span class="team-bullet"></span><span class="muted small">SHSU / BLACK</span><span class="tile-arrow">↗</span></div>
+        <h3>Black</h3>
+        <p>4 historical players · 8 recorded series</p>
+        <div class="tile-metric"><strong>2.16</strong><span>Goals / game</span></div>
+      </a>
+      
+    </div>
+
+    <div class="subsection-heading"><h3>All SHSU team records</h3><p>Best single-game totals across all SHSU rosters and recorded seasons.</p></div>
+    
+      <div class="table-scroll"><table class="data-table">
+        <thead><tr><th>Record</th><th>Value</th><th>Holder / Match</th></tr></thead>
+        <tbody>
+          <tr><td class="label-cell"><span class="record-icon">🏆</span> Highest Score</td><td><b class="record-number">2435</b></td>
+            <td><div class="historical-record"><span class="record-season-label">Spring 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/all-seasons/teams/orange/">SHSU Orange</a><a class="muted" href="/SHSU-RL-Records/series/52/#game-1">vs CMU · G1</a><a class="tiny-external" href="https://ballchasing.com/replay/e4d07c33-7d6d-4b6c-96a0-4203120f82fd" rel="noopener noreferrer" target="_blank" aria-label="Open replay">↗</a></div></div></td></tr>
+        
+          <tr><td class="label-cell"><span class="record-icon">⚽</span> Most Goals</td><td><b class="record-number">10</b></td>
+            <td><div class="historical-record"><span class="record-season-label">Spring 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/all-seasons/teams/orange/">SHSU Orange</a><a class="muted" href="/SHSU-RL-Records/series/52/#game-1">vs CMU · G1</a><a class="tiny-external" href="https://ballchasing.com/replay/e4d07c33-7d6d-4b6c-96a0-4203120f82fd" rel="noopener noreferrer" target="_blank" aria-label="Open replay">↗</a></div></div></td></tr>
+        
+          <tr><td class="label-cell"><span class="record-icon">🤝</span> Most Assists</td><td><b class="record-number">9</b></td>
+            <td><div class="historical-record"><span class="record-season-label">Spring 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/all-seasons/teams/orange/">SHSU Orange</a><a class="muted" href="/SHSU-RL-Records/series/52/#game-1">vs CMU · G1</a><a class="tiny-external" href="https://ballchasing.com/replay/e4d07c33-7d6d-4b6c-96a0-4203120f82fd" rel="noopener noreferrer" target="_blank" aria-label="Open replay">↗</a></div></div></td></tr>
+        
+          <tr><td class="label-cell"><span class="record-icon">🧤</span> Most Saves</td><td><b class="record-number">15</b></td>
+            <td><div class="historical-record"><span class="record-season-label">Fall 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/all-seasons/teams/orange/">SHSU Orange</a><a class="muted" href="/SHSU-RL-Records/series/9/#game-4">vs University of Wisconsin-Milwaukee · G4</a><a class="tiny-external" href="https://ballchasing.com/replay/1ac88e30-1221-49bb-8dae-c0964429d6f7" rel="noopener noreferrer" target="_blank" aria-label="Open replay">↗</a></div></div></td></tr>
+        
+          <tr><td class="label-cell"><span class="record-icon">🎯</span> Most Shots</td><td><b class="record-number">23</b></td>
+            <td><div class="historical-record"><span class="record-season-label">Fall 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/all-seasons/teams/black/">SHSU Black</a><a class="muted" href="/SHSU-RL-Records/series/35/#game-5">vs NMSU Crimson · G5</a><a class="tiny-external" href="https://ballchasing.com/replay/807522b6-b9bd-416c-b740-f6e61039e15e" rel="noopener noreferrer" target="_blank" aria-label="Open replay">↗</a></div></div></td></tr>
+        
+          <tr><td class="label-cell"><span class="record-icon">🔥</span> Most G+A</td><td><b class="record-number">19</b></td>
+            <td><div class="historical-record"><span class="record-season-label">Spring 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/all-seasons/teams/orange/">SHSU Orange</a><a class="muted" href="/SHSU-RL-Records/series/52/#game-1">vs CMU · G1</a><a class="tiny-external" href="https://ballchasing.com/replay/e4d07c33-7d6d-4b6c-96a0-4203120f82fd" rel="noopener noreferrer" target="_blank" aria-label="Open replay">↗</a></div></div></td></tr>
+        
+          <tr><td class="label-cell"><span class="record-icon">⭐</span> Most G+A+S</td><td><b class="record-number">22</b></td>
+            <td><div class="historical-record"><span class="record-season-label">Spring 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/all-seasons/teams/orange/">SHSU Orange</a><a class="muted" href="/SHSU-RL-Records/series/52/#game-1">vs CMU · G1</a><a class="tiny-external" href="https://ballchasing.com/replay/e4d07c33-7d6d-4b6c-96a0-4203120f82fd" rel="noopener noreferrer" target="_blank" aria-label="Open replay">↗</a></div></div></td></tr>
+        
+          <tr><td class="label-cell"><span class="record-icon">💥</span> Most Demolitions</td><td><b class="record-number">10</b></td>
+            <td><div class="historical-record"><span class="record-season-label">Fall 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/all-seasons/teams/white/">SHSU White
+</a><a class="muted" href="/SHSU-RL-Records/series/64/#game-3">vs UH Academy · G3</a><a class="tiny-external" href="https://ballchasing.com/replay/4480d329-d715-4f16-9b1b-18b48e74dae3" rel="noopener noreferrer" target="_blank" aria-label="Open replay">↗</a></div></div><div class="historical-record"><span class="record-season-label">Fall 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/all-seasons/teams/black/">SHSU Black</a><a class="muted" href="/SHSU-RL-Records/series/37/#game-4">vs UTD Purple · G4</a><a class="tiny-external" href="https://ballchasing.com/replay/9dec87af-d322-4342-b35b-fb41b3d4893c" rel="noopener noreferrer" target="_blank" aria-label="Open replay">↗</a></div></div><div class="historical-record"><span class="record-season-label">Fall 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/all-seasons/teams/black/">SHSU Black</a><a class="muted" href="/SHSU-RL-Records/series/37/#game-1">vs UTD Purple · G1</a><a class="tiny-external" href="https://ballchasing.com/replay/c3d1d1fb-9dda-4109-9ffa-c6cb965b08b4" rel="noopener noreferrer" target="_blank" aria-label="Open replay">↗</a></div></div><div class="historical-record"><span class="record-season-label">Fall 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/all-seasons/teams/black/">SHSU Black</a><a class="muted" href="/SHSU-RL-Records/series/36/#game-2">vs UNT Dallas Academy · G2</a><a class="tiny-external" href="https://ballchasing.com/replay/c39255f1-65a5-47e9-aefc-f18cf4cfa351" rel="noopener noreferrer" target="_blank" aria-label="Open replay">↗</a></div></div></td></tr>
+        
+          <tr><td class="label-cell"><span class="record-icon">📈</span> Largest Goal Differential</td><td><b class="record-number">9</b></td>
+            <td><div class="historical-record"><span class="record-season-label">Spring 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/all-seasons/teams/orange/">SHSU Orange</a><a class="muted" href="/SHSU-RL-Records/series/52/#game-1">vs CMU · G1</a><a class="tiny-external" href="https://ballchasing.com/replay/e4d07c33-7d6d-4b6c-96a0-4203120f82fd" rel="noopener noreferrer" target="_blank" aria-label="Open replay">↗</a></div></div></td></tr>
+        </tbody>
+      </table></div>
+    
+
+    <div class="subsection-heading"><h3>Records by roster</h3><p>Each team&#39;s historical single-game best across archived seasons.</p></div>
+    <div class="accordion-stack">
+      
+      <details class="accordion"><summary><span class="team-bullet team-bullet-orange"></span><strong>SHSU Orange</strong><span class="muted">Single-game team highs</span><span class="accordion-chevron">⌄</span></summary>
+        <div class="accordion-content">
+          
+          <div class="mini-record-grid">
+            <div class="mini-record"><span class="muted">🏆 Highest Score</span><strong>2435</strong><small class="muted">Spring 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">⚽ Most Goals</span><strong>10</strong><small class="muted">Spring 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">🤝 Most Assists</span><strong>9</strong><small class="muted">Spring 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">🧤 Most Saves</span><strong>15</strong><small class="muted">Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">🎯 Most Shots</span><strong>18</strong><small class="muted">Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">🔥 Most G+A</span><strong>19</strong><small class="muted">Spring 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">⭐ Most G+A+S</span><strong>22</strong><small class="muted">Spring 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">💥 Most Demolitions</span><strong>9</strong><small class="muted">Spring 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">📈 Largest Goal Differential</span><strong>9</strong><small class="muted">Spring 2026</small></div>
+          </div>
+          
+          <a class="text-link" href="/SHSU-RL-Records/all-seasons/teams/orange/">View SHSU Orange →</a>
+        </div>
+      </details>
+      
+      <details class="accordion"><summary><span class="team-bullet team-bullet-white"></span><strong>SHSU White
+</strong><span class="muted">Single-game team highs</span><span class="accordion-chevron">⌄</span></summary>
+        <div class="accordion-content">
+          
+          <div class="mini-record-grid">
+            <div class="mini-record"><span class="muted">🏆 Highest Score</span><strong>1730</strong><small class="muted">Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">⚽ Most Goals</span><strong>7</strong><small class="muted">Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">🤝 Most Assists</span><strong>4</strong><small class="muted">Fall 2026, Fall 2026, Fall 2026, Fall 2026, Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">🧤 Most Saves</span><strong>8</strong><small class="muted">Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">🎯 Most Shots</span><strong>17</strong><small class="muted">Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">🔥 Most G+A</span><strong>11</strong><small class="muted">Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">⭐ Most G+A+S</span><strong>16</strong><small class="muted">Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">💥 Most Demolitions</span><strong>10</strong><small class="muted">Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">📈 Largest Goal Differential</span><strong>4</strong><small class="muted">Fall 2026, Fall 2026</small></div>
+          </div>
+          
+          <a class="text-link" href="/SHSU-RL-Records/all-seasons/teams/white/">View SHSU White
+ →</a>
+        </div>
+      </details>
+      
+      <details class="accordion"><summary><span class="team-bullet team-bullet-black"></span><strong>SHSU Black</strong><span class="muted">Single-game team highs</span><span class="accordion-chevron">⌄</span></summary>
+        <div class="accordion-content">
+          
+          <div class="mini-record-grid">
+            <div class="mini-record"><span class="muted">🏆 Highest Score</span><strong>1948</strong><small class="muted">Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">⚽ Most Goals</span><strong>5</strong><small class="muted">Fall 2026, Fall 2026, Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">🤝 Most Assists</span><strong>5</strong><small class="muted">Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">🧤 Most Saves</span><strong>8</strong><small class="muted">Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">🎯 Most Shots</span><strong>23</strong><small class="muted">Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">🔥 Most G+A</span><strong>10</strong><small class="muted">Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">⭐ Most G+A+S</span><strong>15</strong><small class="muted">Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">💥 Most Demolitions</span><strong>10</strong><small class="muted">Fall 2026, Fall 2026, Fall 2026</small></div>
+          
+            <div class="mini-record"><span class="muted">📈 Largest Goal Differential</span><strong>5</strong><small class="muted">Fall 2026, Fall 2026</small></div>
+          </div>
+          
+          <a class="text-link" href="/SHSU-RL-Records/all-seasons/teams/black/">View SHSU Black →</a>
+        </div>
+      </details>
+      
+    </div>
+  </div>
+
+  
+
+  <div class="tab-panel" id="panel-individuals" role="tabpanel" aria-labelledby="tab-individuals" data-panel="individuals" hidden>
+
+    <div class="subsection-heading"><h3>All SHSU individual records</h3><p>Highest individual game statistics across all rosters and recorded seasons, including ties.</p></div>
+    
+      <div class="table-scroll"><table class="data-table">
+        <thead><tr><th>Record</th><th>Value</th><th>Player / Match</th></tr></thead>
+        <tbody>
+          <tr><td class="label-cell"><span class="record-icon">🏆</span> Highest Score</td><td><b class="record-number">1,109</b></td>
+          <td><div class="historical-record"><span class="record-season-label">Fall 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/players/nyx/all/">Nyx</a><a class="muted" href="/SHSU-RL-Records/series/9/#game-4">vs University of Wisconsin-Milwaukee · G4</a><a class="tiny-external" href="https://ballchasing.com/replay/1ac88e30-1221-49bb-8dae-c0964429d6f7" rel="noopener noreferrer" target="_blank">↗</a></div></div></td></tr>
+        
+          <tr><td class="label-cell"><span class="record-icon">⚽</span> Most Goals</td><td><b class="record-number">5</b></td>
+          <td><div class="historical-record"><span class="record-season-label">Spring 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/players/nyx/all/">Nyx</a><a class="muted" href="/SHSU-RL-Records/series/52/#game-1">vs CMU · G1</a><a class="tiny-external" href="https://ballchasing.com/replay/e4d07c33-7d6d-4b6c-96a0-4203120f82fd" rel="noopener noreferrer" target="_blank">↗</a></div></div><div class="historical-record"><span class="record-season-label">Fall 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/players/nyx/all/">Nyx</a><a class="muted" href="/SHSU-RL-Records/series/3/#game-2">vs Southern Methodist University · G2</a><a class="tiny-external" href="https://ballchasing.com/replay/9fc3b58d-8fbe-430a-9a6f-cfb472b9fce4" rel="noopener noreferrer" target="_blank">↗</a></div></div></td></tr>
+        
+          <tr><td class="label-cell"><span class="record-icon">🤝</span> Most Assists</td><td><b class="record-number">5</b></td>
+          <td><div class="historical-record"><span class="record-season-label">Spring 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/players/nyx/all/">Nyx</a><a class="muted" href="/SHSU-RL-Records/series/55/#game-3">vs Dunwoody · G3</a><a class="tiny-external" href="https://ballchasing.com/replay/e4c24404-63aa-40da-892a-81a8d98ab690" rel="noopener noreferrer" target="_blank">↗</a></div></div></td></tr>
+        
+          <tr><td class="label-cell"><span class="record-icon">🧤</span> Most Saves</td><td><b class="record-number">9</b></td>
+          <td><div class="historical-record"><span class="record-season-label">Fall 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/players/nyx/all/">Nyx</a><a class="muted" href="/SHSU-RL-Records/series/9/#game-4">vs University of Wisconsin-Milwaukee · G4</a><a class="tiny-external" href="https://ballchasing.com/replay/1ac88e30-1221-49bb-8dae-c0964429d6f7" rel="noopener noreferrer" target="_blank">↗</a></div></div></td></tr>
+        
+          <tr><td class="label-cell"><span class="record-icon">🎯</span> Most Shots</td><td><b class="record-number">11</b></td>
+          <td><div class="historical-record"><span class="record-season-label">Fall 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/players/elmblue/all/">Elmblue</a><a class="muted" href="/SHSU-RL-Records/series/35/#game-5">vs NMSU Crimson · G5</a><a class="tiny-external" href="https://ballchasing.com/replay/807522b6-b9bd-416c-b740-f6e61039e15e" rel="noopener noreferrer" target="_blank">↗</a></div></div></td></tr>
+        
+          <tr><td class="label-cell"><span class="record-icon">🔥</span> Most G+A</td><td><b class="record-number">9</b></td>
+          <td><div class="historical-record"><span class="record-season-label">Spring 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/players/nyx/all/">Nyx</a><a class="muted" href="/SHSU-RL-Records/series/52/#game-1">vs CMU · G1</a><a class="tiny-external" href="https://ballchasing.com/replay/e4d07c33-7d6d-4b6c-96a0-4203120f82fd" rel="noopener noreferrer" target="_blank">↗</a></div></div></td></tr>
+        
+          <tr><td class="label-cell"><span class="record-icon">⭐</span> Most G+A+S</td><td><b class="record-number">11</b></td>
+          <td><div class="historical-record"><span class="record-season-label">Fall 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/players/nyx/all/">Nyx</a><a class="muted" href="/SHSU-RL-Records/series/9/#game-4">vs University of Wisconsin-Milwaukee · G4</a><a class="tiny-external" href="https://ballchasing.com/replay/1ac88e30-1221-49bb-8dae-c0964429d6f7" rel="noopener noreferrer" target="_blank">↗</a></div></div></td></tr>
+        
+          <tr><td class="label-cell"><span class="record-icon">💥</span> Most Demolitions</td><td><b class="record-number">5</b></td>
+          <td><div class="historical-record"><span class="record-season-label">Spring 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/players/coldest/all/">Coldest</a><a class="muted" href="/SHSU-RL-Records/series/47/#game-6">vs New Mexico State University · G6</a><a class="tiny-external" href="https://ballchasing.com/replay/b965f08d-4102-45d2-a30f-b0adffb4ce01" rel="noopener noreferrer" target="_blank">↗</a></div></div><div class="historical-record"><span class="record-season-label">Spring 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/players/coldest/all/">Coldest</a><a class="muted" href="/SHSU-RL-Records/series/41/#game-4">vs Liberty University · G4</a><a class="tiny-external" href="https://ballchasing.com/replay/d45da5b5-2898-4ecf-b66e-c9b6788f8aad" rel="noopener noreferrer" target="_blank">↗</a></div></div><div class="historical-record"><span class="record-season-label">Fall 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/players/elmblue/all/">Elmblue</a><a class="muted" href="/SHSU-RL-Records/series/37/#game-4">vs UTD Purple · G4</a><a class="tiny-external" href="https://ballchasing.com/replay/9dec87af-d322-4342-b35b-fb41b3d4893c" rel="noopener noreferrer" target="_blank">↗</a></div></div><div class="historical-record"><span class="record-season-label">Fall 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/players/festah/all/">Festah</a><a class="muted" href="/SHSU-RL-Records/series/37/#game-1">vs UTD Purple · G1</a><a class="tiny-external" href="https://ballchasing.com/replay/c3d1d1fb-9dda-4109-9ffa-c6cb965b08b4" rel="noopener noreferrer" target="_blank">↗</a></div></div><div class="historical-record"><span class="record-season-label">Fall 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/players/noizy/all/">Noizy</a><a class="muted" href="/SHSU-RL-Records/series/28/#game-3">vs NMSU Pistols · G3</a><a class="tiny-external" href="https://ballchasing.com/replay/a5f7a84c-5f6d-4ed8-b773-96f01b1cc3a8" rel="noopener noreferrer" target="_blank">↗</a></div></div><div class="historical-record"><span class="record-season-label">Fall 2026</span><div class="holder-line"><a href="/SHSU-RL-Records/players/tragic/all/">Tragic</a><a class="muted" href="/SHSU-RL-Records/series/25/#game-1">vs Colorado School of Mines Varsity · G1</a><a class="tiny-external" href="https://ballchasing.com/replay/c7ca3d27-5603-49a5-9a2c-b3833c248f25" rel="noopener noreferrer" target="_blank">↗</a></div></div></td></tr>
+        </tbody>
+      </table></div>
+    
+
+
+    <div class="subsection-heading"><h3>Highest single game score by player</h3><p>Each player's highest recorded scoreboard score across all recorded seasons.</p></div>
+    
+      <div class="table-scroll"><table class="data-table">
+        <thead><tr><th>Player</th><th>Best Score</th><th>Performance</th><th>Match</th></tr></thead>
+        <tbody>
+          <tr><td><a class="player-link" href="/SHSU-RL-Records/players/nyx/all/">Nyx <span>↗</span></a></td>
+          <td><b class="record-number">1,109</b></td>
+          <td class="muted">2G · 0A · 9S · 5 shots</td>
+          <td><div class="small muted">Fall 2026</div><a href="/SHSU-RL-Records/series/9/#game-4">SHSU Orange vs University of Wisconsin-Milwaukee</a><div class="muted small">Game 4 · CCS</div></td></tr>
+        
+          <tr><td><a class="player-link" href="/SHSU-RL-Records/players/noizy/all/">Noizy <span>↗</span></a></td>
+          <td><b class="record-number">1,052</b></td>
+          <td class="muted">4G · 2A · 4S · 9 shots</td>
+          <td><div class="small muted">Fall 2026</div><a href="/SHSU-RL-Records/series/25/#game-1">SHSU White
+ vs Colorado School of Mines Varsity</a><div class="muted small">Game 1 · NECC</div></td></tr>
+        
+          <tr><td><a class="player-link" href="/SHSU-RL-Records/players/coldest/all/">Coldest <span>↗</span></a></td>
+          <td><b class="record-number">818</b></td>
+          <td class="muted">4G · 0A · 3S · 5 shots</td>
+          <td><div class="small muted">Spring 2026</div><a href="/SHSU-RL-Records/series/61/#game-1">SHSU Orange vs Northern Illinois University</a><div class="muted small">Game 1 · CRL</div></td></tr>
+        
+          <tr><td><a class="player-link" href="/SHSU-RL-Records/players/arctic/all/">Arctic <span>↗</span></a></td>
+          <td><b class="record-number">746</b></td>
+          <td class="muted">1G · 3A · 4S · 5 shots</td>
+          <td><div class="small muted">Fall 2026</div><a href="/SHSU-RL-Records/series/25/#game-2">SHSU White
+ vs Colorado School of Mines Varsity</a><div class="muted small">Game 2 · NECC</div></td></tr>
+        
+          <tr><td><a class="player-link" href="/SHSU-RL-Records/players/tango/all/">Tango <span>↗</span></a></td>
+          <td><b class="record-number">742</b></td>
+          <td class="muted">3G · 0A · 4S · 5 shots</td>
+          <td><div class="small muted">Spring 2026</div><a href="/SHSU-RL-Records/series/38/#game-1">SHSU Orange vs Kennesaw State</a><div class="muted small">Game 1 · PCL</div></td></tr>
+        
+          <tr><td><a class="player-link" href="/SHSU-RL-Records/players/elmblue/all/">Elmblue <span>↗</span></a></td>
+          <td><b class="record-number">706</b></td>
+          <td class="muted">2G · 0A · 4S · 4 shots</td>
+          <td><div class="small muted">Fall 2026</div><a href="/SHSU-RL-Records/series/36/#game-1">SHSU Black vs UNT Dallas Academy</a><div class="muted small">Game 1 · NECC</div></td></tr>
+        
+          <tr><td><a class="player-link" href="/SHSU-RL-Records/players/festah/all/">Festah <span>↗</span></a></td>
+          <td><b class="record-number">661</b></td>
+          <td class="muted">3G · 1A · 1S · 4 shots</td>
+          <td><div class="small muted">Fall 2026</div><a href="/SHSU-RL-Records/series/33/#game-1">SHSU Black vs Texas A&amp;M Bonfire</a><div class="muted small">Game 1 · NECC</div></td></tr>
+        
+          <tr><td><a class="player-link" href="/SHSU-RL-Records/players/wind/all/">Wind <span>↗</span></a></td>
+          <td><b class="record-number">650</b></td>
+          <td class="muted">2G · 0A · 2S · 7 shots</td>
+          <td><div class="small muted">Fall 2026</div><a href="/SHSU-RL-Records/series/37/#game-4">SHSU Black vs UTD Purple</a><div class="muted small">Game 4 · NECC</div></td></tr>
+        
+          <tr><td><a class="player-link" href="/SHSU-RL-Records/players/tragic/all/">Tragic <span>↗</span></a></td>
+          <td><b class="record-number">588</b></td>
+          <td class="muted">1G · 3A · 3S · 3 shots</td>
+          <td><div class="small muted">Fall 2026</div><a href="/SHSU-RL-Records/series/64/#game-1">SHSU White
+ vs UH Academy</a><div class="muted small">Game 1 · NECC</div></td></tr>
+        
+          <tr><td><a class="player-link" href="/SHSU-RL-Records/players/lance/all/">Lance <span>↗</span></a></td>
+          <td><b class="record-number">525</b></td>
+          <td class="muted">3G · 2A · 0S · 3 shots</td>
+          <td><div class="small muted">Fall 2026</div><a href="/SHSU-RL-Records/series/33/#game-3">SHSU Black vs Texas A&amp;M Bonfire</a><div class="muted small">Game 3 · NECC</div></td></tr>
+        </tbody>
+      </table></div>
+    
+
+    
+  </div>
+
+  <div class="tab-panel" id="panel-standouts" role="tabpanel" aria-labelledby="tab-standouts" data-panel="standouts" hidden>
+    <div class="subsection-heading"><h3>Standout leaderboard</h3><p>Ranked by qualifying games ÷ games played. Multiple accolades in one game count only once.</p></div>
+    <div class="table-scroll"><table class="data-table leaderboard-table">
+      <thead><tr><th>#</th><th>Player</th><th>Standouts</th><th>Games</th><th>Rate</th><th>Accolades</th></tr></thead>
+      <tbody>
+      <tr><td><span class="rank-number">1</span></td>
+          <td><a class="player-link" href="/SHSU-RL-Records/players/noizy/all/">Noizy <span>↗</span></a><div class="small muted">Spring 2026, Fall 2026</div></td>
+          <td><strong>22</strong></td><td>77</td>
+          <td><span class="rate-badge">28.57%</span></td>
+          <td>
+          
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+
+          <details class="inline-details"><summary>8 / 9 categories <span>⌄</span></summary><div class="accolade-popover">
+          <div><span>💯 550+ Score</span><span class=""><strong>14</strong></span></div><div><span>⚽ Hat Trick</span><span class=""><strong>8</strong></span></div><div><span>🤝 Playmaker</span><span class=""><strong>3</strong></span></div><div><span>🔥 Offensive Engine</span><span class=""><strong>4</strong></span></div><div><span>⚓ Anchor</span><span class="category-zero"><strong>0</strong></span></div><div><span>🚌 Defensive Problem</span><span class=""><strong>2</strong></span></div><div><span>🛡️⚔️ Two-Way</span><span class=""><strong>6</strong></span></div><div><span>💥 Elite Disruptor</span><span class=""><strong>3</strong></span></div><div><span>👑 All-Around</span><span class=""><strong>3</strong></span></div>
+          </div></details></td></tr>
+      
+      <tr><td><span class="rank-number">2</span></td>
+          <td><a class="player-link" href="/SHSU-RL-Records/players/festah/all/">Festah <span>↗</span></a><div class="small muted">Fall 2026</div></td>
+          <td><strong>7</strong></td><td>26</td>
+          <td><span class="rate-badge">26.92%</span></td>
+          <td>
+          
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+            
+              
+                
+              
+            
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+            
+
+          <details class="inline-details"><summary>6 / 9 categories <span>⌄</span></summary><div class="accolade-popover">
+          <div><span>💯 550+ Score</span><span class=""><strong>5</strong></span></div><div><span>⚽ Hat Trick</span><span class=""><strong>2</strong></span></div><div><span>🤝 Playmaker</span><span class="category-zero"><strong>0</strong></span></div><div><span>🔥 Offensive Engine</span><span class=""><strong>2</strong></span></div><div><span>⚓ Anchor</span><span class="category-zero"><strong>0</strong></span></div><div><span>🚌 Defensive Problem</span><span class=""><strong>1</strong></span></div><div><span>🛡️⚔️ Two-Way</span><span class=""><strong>1</strong></span></div><div><span>💥 Elite Disruptor</span><span class=""><strong>1</strong></span></div><div><span>👑 All-Around</span><span class="category-zero"><strong>0</strong></span></div>
+          </div></details></td></tr>
+      
+      <tr><td><span class="rank-number">3</span></td>
+          <td><a class="player-link" href="/SHSU-RL-Records/players/elmblue/all/">Elmblue <span>↗</span></a><div class="small muted">Fall 2026</div></td>
+          <td><strong>6</strong></td><td>23</td>
+          <td><span class="rate-badge">26.09%</span></td>
+          <td>
+          
+            
+              
+                
+              
+            
+              
+            
+              
+                
+              
+            
+              
+            
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+            
+
+          <details class="inline-details"><summary>5 / 9 categories <span>⌄</span></summary><div class="accolade-popover">
+          <div><span>💯 550+ Score</span><span class=""><strong>6</strong></span></div><div><span>⚽ Hat Trick</span><span class="category-zero"><strong>0</strong></span></div><div><span>🤝 Playmaker</span><span class=""><strong>2</strong></span></div><div><span>🔥 Offensive Engine</span><span class="category-zero"><strong>0</strong></span></div><div><span>⚓ Anchor</span><span class="category-zero"><strong>0</strong></span></div><div><span>🚌 Defensive Problem</span><span class=""><strong>2</strong></span></div><div><span>🛡️⚔️ Two-Way</span><span class=""><strong>3</strong></span></div><div><span>💥 Elite Disruptor</span><span class=""><strong>1</strong></span></div><div><span>👑 All-Around</span><span class="category-zero"><strong>0</strong></span></div>
+          </div></details></td></tr>
+      
+      <tr><td><span class="rank-number">4</span></td>
+          <td><a class="player-link" href="/SHSU-RL-Records/players/coldest/all/">Coldest <span>↗</span></a><div class="small muted">Spring 2026, Fall 2026</div></td>
+          <td><strong>39</strong></td><td>160</td>
+          <td><span class="rate-badge">24.38%</span></td>
+          <td>
+          
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+
+          <details class="inline-details"><summary>9 / 9 categories <span>⌄</span></summary><div class="accolade-popover">
+          <div><span>💯 550+ Score</span><span class=""><strong>19</strong></span></div><div><span>⚽ Hat Trick</span><span class=""><strong>12</strong></span></div><div><span>🤝 Playmaker</span><span class=""><strong>6</strong></span></div><div><span>🔥 Offensive Engine</span><span class=""><strong>4</strong></span></div><div><span>⚓ Anchor</span><span class=""><strong>3</strong></span></div><div><span>🚌 Defensive Problem</span><span class=""><strong>11</strong></span></div><div><span>🛡️⚔️ Two-Way</span><span class=""><strong>10</strong></span></div><div><span>💥 Elite Disruptor</span><span class=""><strong>5</strong></span></div><div><span>👑 All-Around</span><span class=""><strong>4</strong></span></div>
+          </div></details></td></tr>
+      
+      <tr><td><span class="rank-number">5</span></td>
+          <td><a class="player-link" href="/SHSU-RL-Records/players/tango/all/">Tango <span>↗</span></a><div class="small muted">Spring 2026, Fall 2026</div></td>
+          <td><strong>29</strong></td><td>128</td>
+          <td><span class="rate-badge">22.66%</span></td>
+          <td>
+          
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+
+          <details class="inline-details"><summary>9 / 9 categories <span>⌄</span></summary><div class="accolade-popover">
+          <div><span>💯 550+ Score</span><span class=""><strong>18</strong></span></div><div><span>⚽ Hat Trick</span><span class=""><strong>8</strong></span></div><div><span>🤝 Playmaker</span><span class=""><strong>6</strong></span></div><div><span>🔥 Offensive Engine</span><span class=""><strong>3</strong></span></div><div><span>⚓ Anchor</span><span class=""><strong>2</strong></span></div><div><span>🚌 Defensive Problem</span><span class=""><strong>7</strong></span></div><div><span>🛡️⚔️ Two-Way</span><span class=""><strong>6</strong></span></div><div><span>💥 Elite Disruptor</span><span class=""><strong>1</strong></span></div><div><span>👑 All-Around</span><span class=""><strong>3</strong></span></div>
+          </div></details></td></tr>
+      
+      <tr><td><span class="rank-number">6</span></td>
+          <td><a class="player-link" href="/SHSU-RL-Records/players/arctic/all/">Arctic <span>↗</span></a><div class="small muted">Fall 2026</div></td>
+          <td><strong>7</strong></td><td>32</td>
+          <td><span class="rate-badge">21.88%</span></td>
+          <td>
+          
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+            
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+
+          <details class="inline-details"><summary>7 / 9 categories <span>⌄</span></summary><div class="accolade-popover">
+          <div><span>💯 550+ Score</span><span class=""><strong>3</strong></span></div><div><span>⚽ Hat Trick</span><span class=""><strong>2</strong></span></div><div><span>🤝 Playmaker</span><span class=""><strong>2</strong></span></div><div><span>🔥 Offensive Engine</span><span class="category-zero"><strong>0</strong></span></div><div><span>⚓ Anchor</span><span class="category-zero"><strong>0</strong></span></div><div><span>🚌 Defensive Problem</span><span class=""><strong>2</strong></span></div><div><span>🛡️⚔️ Two-Way</span><span class=""><strong>4</strong></span></div><div><span>💥 Elite Disruptor</span><span class=""><strong>1</strong></span></div><div><span>👑 All-Around</span><span class=""><strong>1</strong></span></div>
+          </div></details></td></tr>
+      
+      <tr><td><span class="rank-number">7</span></td>
+          <td><a class="player-link" href="/SHSU-RL-Records/players/nyx/all/">Nyx <span>↗</span></a><div class="small muted">Spring 2026, Fall 2026</div></td>
+          <td><strong>33</strong></td><td>165</td>
+          <td><span class="rate-badge">20.00%</span></td>
+          <td>
+          
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+
+          <details class="inline-details"><summary>9 / 9 categories <span>⌄</span></summary><div class="accolade-popover">
+          <div><span>💯 550+ Score</span><span class=""><strong>20</strong></span></div><div><span>⚽ Hat Trick</span><span class=""><strong>10</strong></span></div><div><span>🤝 Playmaker</span><span class=""><strong>6</strong></span></div><div><span>🔥 Offensive Engine</span><span class=""><strong>3</strong></span></div><div><span>⚓ Anchor</span><span class=""><strong>3</strong></span></div><div><span>🚌 Defensive Problem</span><span class=""><strong>7</strong></span></div><div><span>🛡️⚔️ Two-Way</span><span class=""><strong>9</strong></span></div><div><span>💥 Elite Disruptor</span><span class=""><strong>1</strong></span></div><div><span>👑 All-Around</span><span class=""><strong>6</strong></span></div>
+          </div></details></td></tr>
+      
+      <tr><td><span class="rank-number">8</span></td>
+          <td><a class="player-link" href="/SHSU-RL-Records/players/tragic/all/">Tragic <span>↗</span></a><div class="small muted">Fall 2026</div></td>
+          <td><strong>6</strong></td><td>34</td>
+          <td><span class="rate-badge">17.65%</span></td>
+          <td>
+          
+            
+              
+                
+              
+            
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+
+          <details class="inline-details"><summary>7 / 9 categories <span>⌄</span></summary><div class="accolade-popover">
+          <div><span>💯 550+ Score</span><span class=""><strong>1</strong></span></div><div><span>⚽ Hat Trick</span><span class="category-zero"><strong>0</strong></span></div><div><span>🤝 Playmaker</span><span class=""><strong>2</strong></span></div><div><span>🔥 Offensive Engine</span><span class=""><strong>1</strong></span></div><div><span>⚓ Anchor</span><span class=""><strong>1</strong></span></div><div><span>🚌 Defensive Problem</span><span class="category-zero"><strong>0</strong></span></div><div><span>🛡️⚔️ Two-Way</span><span class=""><strong>2</strong></span></div><div><span>💥 Elite Disruptor</span><span class=""><strong>1</strong></span></div><div><span>👑 All-Around</span><span class=""><strong>1</strong></span></div>
+          </div></details></td></tr>
+      
+      <tr><td><span class="rank-number">9</span></td>
+          <td><a class="player-link" href="/SHSU-RL-Records/players/wind/all/">Wind <span>↗</span></a><div class="small muted">Fall 2026</div></td>
+          <td><strong>4</strong></td><td>36</td>
+          <td><span class="rate-badge">11.11%</span></td>
+          <td>
+          
+            
+              
+                
+              
+            
+              
+            
+              
+            
+              
+                
+              
+            
+              
+            
+              
+            
+              
+                
+              
+            
+              
+                
+              
+            
+              
+            
+
+          <details class="inline-details"><summary>4 / 9 categories <span>⌄</span></summary><div class="accolade-popover">
+          <div><span>💯 550+ Score</span><span class=""><strong>3</strong></span></div><div><span>⚽ Hat Trick</span><span class="category-zero"><strong>0</strong></span></div><div><span>🤝 Playmaker</span><span class="category-zero"><strong>0</strong></span></div><div><span>🔥 Offensive Engine</span><span class=""><strong>1</strong></span></div><div><span>⚓ Anchor</span><span class="category-zero"><strong>0</strong></span></div><div><span>🚌 Defensive Problem</span><span class="category-zero"><strong>0</strong></span></div><div><span>🛡️⚔️ Two-Way</span><span class=""><strong>1</strong></span></div><div><span>💥 Elite Disruptor</span><span class=""><strong>1</strong></span></div><div><span>👑 All-Around</span><span class="category-zero"><strong>0</strong></span></div>
+          </div></details></td></tr>
+      
+      <tr><td><span class="rank-number">10</span></td>
+          <td><a class="player-link" href="/SHSU-RL-Records/players/lance/all/">Lance <span>↗</span></a><div class="small muted">Fall 2026</div></td>
+          <td><strong>1</strong></td><td>15</td>
+          <td><span class="rate-badge">6.67%</span></td>
+          <td>
+          
+            
+              
+            
+              
+                
+              
+            
+              
+            
+              
+                
+              
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+            
+
+          <details class="inline-details"><summary>2 / 9 categories <span>⌄</span></summary><div class="accolade-popover">
+          <div><span>💯 550+ Score</span><span class="category-zero"><strong>0</strong></span></div><div><span>⚽ Hat Trick</span><span class=""><strong>1</strong></span></div><div><span>🤝 Playmaker</span><span class="category-zero"><strong>0</strong></span></div><div><span>🔥 Offensive Engine</span><span class=""><strong>1</strong></span></div><div><span>⚓ Anchor</span><span class="category-zero"><strong>0</strong></span></div><div><span>🚌 Defensive Problem</span><span class="category-zero"><strong>0</strong></span></div><div><span>🛡️⚔️ Two-Way</span><span class="category-zero"><strong>0</strong></span></div><div><span>💥 Elite Disruptor</span><span class="category-zero"><strong>0</strong></span></div><div><span>👑 All-Around</span><span class="category-zero"><strong>0</strong></span></div>
+          </div></details></td></tr>
+      </tbody>
+    </table></div>
+    
+    <div class="subsection-heading"><h3>What qualifies as a standout?</h3><p>Each player-game can earn multiple categories, but only one standout game.</p></div>
+    <div class="rules-grid">
+      <div class="rule-card"><span class="rule-emoji">💯</span><div><strong>550+ Score</strong><span>550+ points</span></div></div><div class="rule-card"><span class="rule-emoji">⚽</span><div><strong>Hat Trick</strong><span>3+ goals</span></div></div><div class="rule-card"><span class="rule-emoji">🤝</span><div><strong>Playmaker</strong><span>3+ assists</span></div></div><div class="rule-card"><span class="rule-emoji">🔥</span><div><strong>Offensive Engine</strong><span>2+ goals AND 2+ assists</span></div></div><div class="rule-card"><span class="rule-emoji">⚓</span><div><strong>Anchor</strong><span>5+ saves</span></div></div><div class="rule-card"><span class="rule-emoji">🚌</span><div><strong>Defensive Problem</strong><span>4+ saves AND (1+ G+A OR 3+ demos)</span></div></div><div class="rule-card"><span class="rule-emoji">🛡️⚔️</span><div><strong>Two-Way</strong><span>3+ saves AND 2+ G+A</span></div></div><div class="rule-card"><span class="rule-emoji">💥</span><div><strong>Elite Disruptor</strong><span>4+ demos AND 3+ G+A+S</span></div></div><div class="rule-card"><span class="rule-emoji">👑</span><div><strong>All-Around</strong><span>7+ G+A+S</span></div></div>
+    </div>
+    <p class="footnote">Standout achievements are stat-based thresholds applied uniformly to recorded SHSU player-games. Each player can earn multiple categories in one game, but that game counts as one standout.</p>
+    <p class="footnote"><a class="text-link" href="/SHSU-RL-Records/methodology/">See Methodology &amp; Insights for more details about Standouts →</a></p>
+  </div>
+  <div class="tab-panel" id="panel-player-stats" role="tabpanel" aria-labelledby="tab-player-stats" data-panel="player-stats" hidden>
+    <div class="subsection-heading">
+      <h3>Season-wide player statistics</h3>
+      <p>All recorded SHSU player appearances across every archived season, including substitutions for another roster. Only played games are counted; official forfeits are excluded.</p>
+    </div>
+    
+    <div class="player-stats-controls">
+      <label for="player-stats-mode">Display
+        <select id="player-stats-mode">
+          <option value="averages" selected>Per game</option>
+          <option value="totals">Totals</option>
+        </select>
+      </label>
+      <label for="player-stats-min-games">Minimum games
+        <select id="player-stats-min-games">
+          <option value="0" selected>All players</option>
+          <option value="5">5+ games</option>
+          <option value="10">10+ games</option>
+          <option value="25">25+ games</option>
+        </select>
+      </label>
+    </div>
+    <p class="small muted player-stats-description">Click any column heading to sort; click again to reverse. Per-game values use each player's played games. Shooting percentage is total goals ÷ total shots. Standout games count once, even when multiple accolades are earned.</p>
+    <div class="table-scroll">
+      <table class="data-table season-player-stats-table" id="season-player-stats-table">
+        <thead><tr>
+          
+          <th scope="col" data-sort-key="name" aria-sort="none">
+            <button type="button" class="player-stats-sort-button" data-sort-control="name"
+                    title="Sort by Player">
+              <span>Player</span>
+              <span class="player-stats-sort-arrow" aria-hidden="true"></span>
+            </button>
+          </th>
+          
+          <th scope="col" data-sort-key="teams" aria-sort="none">
+            <button type="button" class="player-stats-sort-button" data-sort-control="teams"
+                    title="Sort by Roster(s)">
+              <span>Roster(s)</span>
+              <span class="player-stats-sort-arrow" aria-hidden="true"></span>
+            </button>
+          </th>
+          
+          <th scope="col" data-sort-key="games" aria-sort="descending">
+            <button type="button" class="player-stats-sort-button" data-sort-control="games"
+                    title="Sort by GP">
+              <span>GP</span>
+              <span class="player-stats-sort-arrow" aria-hidden="true">▼</span>
+            </button>
+          </th>
+          
+          <th scope="col" data-sort-key="score" aria-sort="none">
+            <button type="button" class="player-stats-sort-button" data-sort-control="score"
+                    title="Sort by Score">
+              <span>Score</span>
+              <span class="player-stats-sort-arrow" aria-hidden="true"></span>
+            </button>
+          </th>
+          
+          <th scope="col" data-sort-key="goals" aria-sort="none">
+            <button type="button" class="player-stats-sort-button" data-sort-control="goals"
+                    title="Sort by G">
+              <span>G</span>
+              <span class="player-stats-sort-arrow" aria-hidden="true"></span>
+            </button>
+          </th>
+          
+          <th scope="col" data-sort-key="assists" aria-sort="none">
+            <button type="button" class="player-stats-sort-button" data-sort-control="assists"
+                    title="Sort by A">
+              <span>A</span>
+              <span class="player-stats-sort-arrow" aria-hidden="true"></span>
+            </button>
+          </th>
+          
+          <th scope="col" data-sort-key="saves" aria-sort="none">
+            <button type="button" class="player-stats-sort-button" data-sort-control="saves"
+                    title="Sort by S">
+              <span>S</span>
+              <span class="player-stats-sort-arrow" aria-hidden="true"></span>
+            </button>
+          </th>
+          
+          <th scope="col" data-sort-key="shots" aria-sort="none">
+            <button type="button" class="player-stats-sort-button" data-sort-control="shots"
+                    title="Sort by Shots">
+              <span>Shots</span>
+              <span class="player-stats-sort-arrow" aria-hidden="true"></span>
+            </button>
+          </th>
+          
+          <th scope="col" data-sort-key="shooting" aria-sort="none">
+            <button type="button" class="player-stats-sort-button" data-sort-control="shooting"
+                    title="Sort by SH%">
+              <span>SH%</span>
+              <span class="player-stats-sort-arrow" aria-hidden="true"></span>
+            </button>
+          </th>
+          
+          <th scope="col" data-sort-key="demos" aria-sort="none">
+            <button type="button" class="player-stats-sort-button" data-sort-control="demos"
+                    title="Sort by Demos">
+              <span>Demos</span>
+              <span class="player-stats-sort-arrow" aria-hidden="true"></span>
+            </button>
+          </th>
+          
+          <th scope="col" data-sort-key="ga" aria-sort="none">
+            <button type="button" class="player-stats-sort-button" data-sort-control="ga"
+                    title="Sort by G+A">
+              <span>G+A</span>
+              <span class="player-stats-sort-arrow" aria-hidden="true"></span>
+            </button>
+          </th>
+          
+          <th scope="col" data-sort-key="gas" aria-sort="none">
+            <button type="button" class="player-stats-sort-button" data-sort-control="gas"
+                    title="Sort by G+A+S">
+              <span>G+A+S</span>
+              <span class="player-stats-sort-arrow" aria-hidden="true"></span>
+            </button>
+          </th>
+          
+          <th scope="col" data-sort-key="standouts" aria-sort="none">
+            <button type="button" class="player-stats-sort-button" data-sort-control="standouts"
+                    title="Sort by Standout %">
+              <span data-standout-label>Standout %</span>
+              <span class="player-stats-sort-arrow" aria-hidden="true"></span>
+            </button>
+          </th>
+          
+        </tr></thead>
+        <tbody>
+          
+          
+          <tr data-player-stats-row data-player-name="nyx"
+              data-team-names="shsu orange · fall 2026, shsu orange · spring 2026"
+              data-games="165"
+              data-shooting="32.72">
+            <td><a class="player-link" href="/SHSU-RL-Records/players/nyx/all/">Nyx <span>↗</span></a></td>
+            <td class="muted">SHSU Orange · Fall 2026, SHSU Orange · Spring 2026</td>
+            <td>165</td>
+            
+            <td data-player-stat="score"
+                data-total="59655"
+                data-average="361.55">361.55</td>
+            
+            <td data-player-stat="goals"
+                data-total="142"
+                data-average="0.86">0.86</td>
+            
+            <td data-player-stat="assists"
+                data-total="110"
+                data-average="0.67">0.67</td>
+            
+            <td data-player-stat="saves"
+                data-total="216"
+                data-average="1.31">1.31</td>
+            
+            <td data-player-stat="shots"
+                data-total="434"
+                data-average="2.63">2.63</td>
+            
+            <td>32.72%</td>
+            
+            <td data-player-stat="demos"
+                data-total="168"
+                data-average="1.02">1.02</td>
+            
+            <td data-player-stat="ga"
+                data-total="252"
+                data-average="1.53">1.53</td>
+            
+            <td data-player-stat="gas"
+                data-total="468"
+                data-average="2.84">2.84</td>
+            
+            <td data-player-stat="standouts"
+                data-total="33"
+                data-average="20.00">20.00%</td>
+          </tr>
+          
+          
+          <tr data-player-stats-row data-player-name="coldest"
+              data-team-names="shsu orange · fall 2026, shsu orange · spring 2026"
+              data-games="160"
+              data-shooting="29.91">
+            <td><a class="player-link" href="/SHSU-RL-Records/players/coldest/all/">Coldest <span>↗</span></a></td>
+            <td class="muted">SHSU Orange · Fall 2026, SHSU Orange · Spring 2026</td>
+            <td>160</td>
+            
+            <td data-player-stat="score"
+                data-total="59867"
+                data-average="374.17">374.17</td>
+            
+            <td data-player-stat="goals"
+                data-total="140"
+                data-average="0.88">0.88</td>
+            
+            <td data-player-stat="assists"
+                data-total="114"
+                data-average="0.71">0.71</td>
+            
+            <td data-player-stat="saves"
+                data-total="223"
+                data-average="1.39">1.39</td>
+            
+            <td data-player-stat="shots"
+                data-total="468"
+                data-average="2.92">2.92</td>
+            
+            <td>29.91%</td>
+            
+            <td data-player-stat="demos"
+                data-total="184"
+                data-average="1.15">1.15</td>
+            
+            <td data-player-stat="ga"
+                data-total="254"
+                data-average="1.59">1.59</td>
+            
+            <td data-player-stat="gas"
+                data-total="477"
+                data-average="2.98">2.98</td>
+            
+            <td data-player-stat="standouts"
+                data-total="39"
+                data-average="24.38">24.38%</td>
+          </tr>
+          
+          
+          <tr data-player-stats-row data-player-name="tango"
+              data-team-names="shsu orange · fall 2026, shsu orange · spring 2026"
+              data-games="128"
+              data-shooting="27.98">
+            <td><a class="player-link" href="/SHSU-RL-Records/players/tango/all/">Tango <span>↗</span></a></td>
+            <td class="muted">SHSU Orange · Fall 2026, SHSU Orange · Spring 2026</td>
+            <td>128</td>
+            
+            <td data-player-stat="score"
+                data-total="49772"
+                data-average="388.84">388.84</td>
+            
+            <td data-player-stat="goals"
+                data-total="115"
+                data-average="0.90">0.90</td>
+            
+            <td data-player-stat="assists"
+                data-total="87"
+                data-average="0.68">0.68</td>
+            
+            <td data-player-stat="saves"
+                data-total="179"
+                data-average="1.40">1.40</td>
+            
+            <td data-player-stat="shots"
+                data-total="411"
+                data-average="3.21">3.21</td>
+            
+            <td>27.98%</td>
+            
+            <td data-player-stat="demos"
+                data-total="114"
+                data-average="0.89">0.89</td>
+            
+            <td data-player-stat="ga"
+                data-total="202"
+                data-average="1.58">1.58</td>
+            
+            <td data-player-stat="gas"
+                data-total="381"
+                data-average="2.98">2.98</td>
+            
+            <td data-player-stat="standouts"
+                data-total="29"
+                data-average="22.66">22.66%</td>
+          </tr>
+          
+          
+          <tr data-player-stats-row data-player-name="noizy"
+              data-team-names="shsu white
+ · fall 2026, shsu orange · fall 2026, shsu orange · spring 2026"
+              data-games="77"
+              data-shooting="33.21">
+            <td><a class="player-link" href="/SHSU-RL-Records/players/noizy/all/">Noizy <span>↗</span></a></td>
+            <td class="muted">SHSU White
+ · Fall 2026, SHSU Orange · Fall 2026, SHSU Orange · Spring 2026</td>
+            <td>77</td>
+            
+            <td data-player-stat="score"
+                data-total="31625"
+                data-average="410.71">410.71</td>
+            
+            <td data-player-stat="goals"
+                data-total="87"
+                data-average="1.13">1.13</td>
+            
+            <td data-player-stat="assists"
+                data-total="53"
+                data-average="0.69">0.69</td>
+            
+            <td data-player-stat="saves"
+                data-total="103"
+                data-average="1.34">1.34</td>
+            
+            <td data-player-stat="shots"
+                data-total="262"
+                data-average="3.40">3.40</td>
+            
+            <td>33.21%</td>
+            
+            <td data-player-stat="demos"
+                data-total="98"
+                data-average="1.27">1.27</td>
+            
+            <td data-player-stat="ga"
+                data-total="140"
+                data-average="1.82">1.82</td>
+            
+            <td data-player-stat="gas"
+                data-total="243"
+                data-average="3.16">3.16</td>
+            
+            <td data-player-stat="standouts"
+                data-total="22"
+                data-average="28.57">28.57%</td>
+          </tr>
+          
+          
+          <tr data-player-stats-row data-player-name="wind"
+              data-team-names="shsu white
+ · fall 2026, shsu black · fall 2026"
+              data-games="36"
+              data-shooting="19.63">
+            <td><a class="player-link" href="/SHSU-RL-Records/players/wind/all/">Wind <span>↗</span></a></td>
+            <td class="muted">SHSU White
+ · Fall 2026, SHSU Black · Fall 2026</td>
+            <td>36</td>
+            
+            <td data-player-stat="score"
+                data-total="10965"
+                data-average="304.58">304.58</td>
+            
+            <td data-player-stat="goals"
+                data-total="21"
+                data-average="0.58">0.58</td>
+            
+            <td data-player-stat="assists"
+                data-total="15"
+                data-average="0.42">0.42</td>
+            
+            <td data-player-stat="saves"
+                data-total="34"
+                data-average="0.94">0.94</td>
+            
+            <td data-player-stat="shots"
+                data-total="107"
+                data-average="2.97">2.97</td>
+            
+            <td>19.63%</td>
+            
+            <td data-player-stat="demos"
+                data-total="36"
+                data-average="1.00">1.00</td>
+            
+            <td data-player-stat="ga"
+                data-total="36"
+                data-average="1.00">1.00</td>
+            
+            <td data-player-stat="gas"
+                data-total="70"
+                data-average="1.94">1.94</td>
+            
+            <td data-player-stat="standouts"
+                data-total="4"
+                data-average="11.11">11.11%</td>
+          </tr>
+          
+          
+          <tr data-player-stats-row data-player-name="tragic"
+              data-team-names="shsu white
+ · fall 2026, shsu orange · fall 2026"
+              data-games="34"
+              data-shooting="26.92">
+            <td><a class="player-link" href="/SHSU-RL-Records/players/tragic/all/">Tragic <span>↗</span></a></td>
+            <td class="muted">SHSU White
+ · Fall 2026, SHSU Orange · Fall 2026</td>
+            <td>34</td>
+            
+            <td data-player-stat="score"
+                data-total="10668"
+                data-average="313.76">313.76</td>
+            
+            <td data-player-stat="goals"
+                data-total="21"
+                data-average="0.62">0.62</td>
+            
+            <td data-player-stat="assists"
+                data-total="24"
+                data-average="0.71">0.71</td>
+            
+            <td data-player-stat="saves"
+                data-total="45"
+                data-average="1.32">1.32</td>
+            
+            <td data-player-stat="shots"
+                data-total="78"
+                data-average="2.29">2.29</td>
+            
+            <td>26.92%</td>
+            
+            <td data-player-stat="demos"
+                data-total="43"
+                data-average="1.26">1.26</td>
+            
+            <td data-player-stat="ga"
+                data-total="45"
+                data-average="1.32">1.32</td>
+            
+            <td data-player-stat="gas"
+                data-total="90"
+                data-average="2.65">2.65</td>
+            
+            <td data-player-stat="standouts"
+                data-total="6"
+                data-average="17.65">17.65%</td>
+          </tr>
+          
+          
+          <tr data-player-stats-row data-player-name="arctic"
+              data-team-names="shsu white
+ · fall 2026"
+              data-games="32"
+              data-shooting="35.11">
+            <td><a class="player-link" href="/SHSU-RL-Records/players/arctic/all/">Arctic <span>↗</span></a></td>
+            <td class="muted">SHSU White
+ · Fall 2026</td>
+            <td>32</td>
+            
+            <td data-player-stat="score"
+                data-total="12505"
+                data-average="390.78">390.78</td>
+            
+            <td data-player-stat="goals"
+                data-total="33"
+                data-average="1.03">1.03</td>
+            
+            <td data-player-stat="assists"
+                data-total="22"
+                data-average="0.69">0.69</td>
+            
+            <td data-player-stat="saves"
+                data-total="44"
+                data-average="1.38">1.38</td>
+            
+            <td data-player-stat="shots"
+                data-total="94"
+                data-average="2.94">2.94</td>
+            
+            <td>35.11%</td>
+            
+            <td data-player-stat="demos"
+                data-total="31"
+                data-average="0.97">0.97</td>
+            
+            <td data-player-stat="ga"
+                data-total="55"
+                data-average="1.72">1.72</td>
+            
+            <td data-player-stat="gas"
+                data-total="99"
+                data-average="3.09">3.09</td>
+            
+            <td data-player-stat="standouts"
+                data-total="7"
+                data-average="21.88">21.88%</td>
+          </tr>
+          
+          
+          <tr data-player-stats-row data-player-name="festah"
+              data-team-names="shsu black · fall 2026"
+              data-games="26"
+              data-shooting="32.1">
+            <td><a class="player-link" href="/SHSU-RL-Records/players/festah/all/">Festah <span>↗</span></a></td>
+            <td class="muted">SHSU Black · Fall 2026</td>
+            <td>26</td>
+            
+            <td data-player-stat="score"
+                data-total="10122"
+                data-average="389.31">389.31</td>
+            
+            <td data-player-stat="goals"
+                data-total="26"
+                data-average="1.00">1.00</td>
+            
+            <td data-player-stat="assists"
+                data-total="14"
+                data-average="0.54">0.54</td>
+            
+            <td data-player-stat="saves"
+                data-total="30"
+                data-average="1.15">1.15</td>
+            
+            <td data-player-stat="shots"
+                data-total="81"
+                data-average="3.12">3.12</td>
+            
+            <td>32.10%</td>
+            
+            <td data-player-stat="demos"
+                data-total="44"
+                data-average="1.69">1.69</td>
+            
+            <td data-player-stat="ga"
+                data-total="40"
+                data-average="1.54">1.54</td>
+            
+            <td data-player-stat="gas"
+                data-total="70"
+                data-average="2.69">2.69</td>
+            
+            <td data-player-stat="standouts"
+                data-total="7"
+                data-average="26.92">26.92%</td>
+          </tr>
+          
+          
+          <tr data-player-stats-row data-player-name="elmblue"
+              data-team-names="shsu black · fall 2026"
+              data-games="23"
+              data-shooting="21.25">
+            <td><a class="player-link" href="/SHSU-RL-Records/players/elmblue/all/">Elmblue <span>↗</span></a></td>
+            <td class="muted">SHSU Black · Fall 2026</td>
+            <td>23</td>
+            
+            <td data-player-stat="score"
+                data-total="9688"
+                data-average="421.22">421.22</td>
+            
+            <td data-player-stat="goals"
+                data-total="17"
+                data-average="0.74">0.74</td>
+            
+            <td data-player-stat="assists"
+                data-total="16"
+                data-average="0.70">0.70</td>
+            
+            <td data-player-stat="saves"
+                data-total="36"
+                data-average="1.57">1.57</td>
+            
+            <td data-player-stat="shots"
+                data-total="80"
+                data-average="3.48">3.48</td>
+            
+            <td>21.25%</td>
+            
+            <td data-player-stat="demos"
+                data-total="34"
+                data-average="1.48">1.48</td>
+            
+            <td data-player-stat="ga"
+                data-total="33"
+                data-average="1.43">1.43</td>
+            
+            <td data-player-stat="gas"
+                data-total="69"
+                data-average="3.00">3.00</td>
+            
+            <td data-player-stat="standouts"
+                data-total="6"
+                data-average="26.09">26.09%</td>
+          </tr>
+          
+          
+          <tr data-player-stats-row data-player-name="lance"
+              data-team-names="shsu black · fall 2026"
+              data-games="15"
+              data-shooting="29.63">
+            <td><a class="player-link" href="/SHSU-RL-Records/players/lance/all/">Lance <span>↗</span></a></td>
+            <td class="muted">SHSU Black · Fall 2026</td>
+            <td>15</td>
+            
+            <td data-player-stat="score"
+                data-total="3666"
+                data-average="244.40">244.40</td>
+            
+            <td data-player-stat="goals"
+                data-total="8"
+                data-average="0.53">0.53</td>
+            
+            <td data-player-stat="assists"
+                data-total="5"
+                data-average="0.33">0.33</td>
+            
+            <td data-player-stat="saves"
+                data-total="14"
+                data-average="0.93">0.93</td>
+            
+            <td data-player-stat="shots"
+                data-total="27"
+                data-average="1.80">1.80</td>
+            
+            <td>29.63%</td>
+            
+            <td data-player-stat="demos"
+                data-total="11"
+                data-average="0.73">0.73</td>
+            
+            <td data-player-stat="ga"
+                data-total="13"
+                data-average="0.87">0.87</td>
+            
+            <td data-player-stat="gas"
+                data-total="27"
+                data-average="1.80">1.80</td>
+            
+            <td data-player-stat="standouts"
+                data-total="1"
+                data-average="6.67">6.67%</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted" id="player-stats-visible-count" role="status" aria-live="polite">Showing 10 of 10 players.</p>
+    
+  </div>
+</section>
+<script>
+  /* Season Player Stats: runs after the table exists, not inside <title>. */
+  (() => {
+    "use strict";
+    const table = document.getElementById("season-player-stats-table");
+    const modeSelect = document.getElementById("player-stats-mode");
+    const minSelect = document.getElementById("player-stats-min-games");
+    if (!table || !modeSelect || !minSelect || !table.tBodies.length) return;
+
+    const body = table.tBodies[0];
+    const rows = Array.from(body.querySelectorAll("[data-player-stats-row]"));
+    const headings = Array.from(table.querySelectorAll("thead th[data-sort-key]"));
+    const status = document.getElementById("player-stats-visible-count");
+    const standoutHeading = table.querySelector("[data-standout-label]");
+    let sortKey = "games";
+    let sortDirection = "desc";
+
+    function metricValue(row, key) {
+      if (key === "name") return row.dataset.playerName || "";
+      if (key === "teams") return row.dataset.teamNames || "";
+      if (key === "games") return Number(row.dataset.games);
+      if (key === "shooting") {
+        const value = Number(row.dataset.shooting);
+        return value < 0 ? null : value;
+      }
+      const cell = row.querySelector('[data-player-stat="' + key + '"]');
+      if (!cell) return null;
+      const raw = cell.dataset[modeSelect.value === "totals" ? "total" : "average"];
+      return raw === "" || raw === undefined ? null : Number(raw);
+    }
+
+    function compareRows(a, b) {
+      const aValue = metricValue(a, sortKey);
+      const bValue = metricValue(b, sortKey);
+      // Missing values always go last, regardless of sort direction.
+      if (aValue == null && bValue != null) return 1;
+      if (bValue == null && aValue != null) return -1;
+      let result = 0;
+      if (typeof aValue === "string" && typeof bValue === "string") {
+        result = aValue.localeCompare(bValue, undefined, { sensitivity:"base" });
+      } else if (aValue != null && bValue != null) {
+        result = aValue - bValue;
+      }
+      if (result !== 0) return sortDirection === "asc" ? result : -result;
+      return (a.dataset.playerName || "").localeCompare(b.dataset.playerName || "");
+    }
+
+    function render() {
+      const mode = modeSelect.value;
+      const minimum = Number(minSelect.value);
+      if (standoutHeading) standoutHeading.textContent =
+        mode === "totals" ? "Standout games" : "Standout %";
+
+      rows.sort(compareRows);
+      const fragment = document.createDocumentFragment();
+      let visible = 0;
+      for (const row of rows) {
+        for (const cell of row.querySelectorAll("[data-player-stat]")) {
+          const raw = cell.dataset[mode === "totals" ? "total" : "average"];
+          if (raw === "" || raw === undefined) {
+            cell.textContent = "—";
+          } else {
+            const value = Number(raw);
+            cell.textContent = mode === "totals"
+              ? value.toLocaleString("en-US")
+              : value.toFixed(2) + (cell.dataset.playerStat === "standouts" ? "%" : "");
+          }
+        }
+        row.hidden = Number(row.dataset.games) < minimum;
+        if (!row.hidden) visible++;
+        fragment.appendChild(row);
+      }
+      body.appendChild(fragment);
+
+      for (const heading of headings) {
+        const active = heading.dataset.sortKey === sortKey;
+        heading.setAttribute("aria-sort", active
+          ? (sortDirection === "asc" ? "ascending" : "descending")
+          : "none");
+        const arrow = heading.querySelector(".player-stats-sort-arrow");
+        if (arrow) arrow.textContent = active ? (sortDirection === "asc" ? "▲" : "▼") : "";
+      }
+      if (status) status.textContent = "Showing " + visible + " of " + rows.length + " players.";
+    }
+
+    for (const heading of headings) {
+      const button = heading.querySelector("[data-sort-control]");
+      if (!button) continue;
+      button.addEventListener("click", () => {
+        const selected = heading.dataset.sortKey;
+        if (selected === sortKey) {
+          sortDirection = sortDirection === "desc" ? "asc" : "desc";
+        } else {
+          sortKey = selected;
+          sortDirection = selected === "name" || selected === "teams" ? "asc" : "desc";
+        }
+        render();
+      });
+    }
+    modeSelect.addEventListener("change", render);
+    minSelect.addEventListener("change", render);
+    render();
+  })();
+</script>
+
+      </main>
+      <footer class="site-footer">
+        <span>SHSU Rocket League • Independent community records archive</span>
+        <span>Stats from recorded games · Forfeits excluded from player statistics</span>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>

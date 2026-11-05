@@ -94,7 +94,16 @@ def output_file(route: str, directory: Path) -> Path:
 
 
 def discover_routes(conn, repo):
-    routes = ["/"]
+
+    routes = ["/", "/all-seasons/", "/methodology/"]
+    all_time_team_slugs = [
+        row["slug"] for row in conn.execute(
+            "SELECT DISTINCT t.slug FROM team_seasons ts "
+            "JOIN teams t ON t.id=ts.team_id ORDER BY t.slug"
+        )
+    ]
+    for team_slug in all_time_team_slugs:
+        routes.append(f"/all-seasons/teams/{team_slug}/")
     for season in repo.seasons(conn):
         slug = season["slug"]
         routes.append(f"/seasons/{slug}/")
