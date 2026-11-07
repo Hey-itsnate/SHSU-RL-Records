@@ -37,6 +37,7 @@ def inject_global_navigation():
         "standout_types": repo.STANDOUT_TYPES,
         "highlights_for_game": lambda game_id: repo.highlights_for_game(conn, game_id),
         "series_highlight_games": lambda series_id: repo.series_highlight_games(conn, series_id),
+        "division_for_series": lambda series_id: repo.division_for_series(conn, series_id),
     }
 
 
@@ -72,6 +73,7 @@ def season_page(season_slug):
         item["records"] = repo.records_for_games(team_games)
         item["roster"] = repo.roster(conn, item["id"])
         item["series_count"] = len(repo.team_series(conn, item["id"]))
+        item["competitions"] = repo.team_competitions(conn, [item["id"]])
 
     appearances = repo.individual_games(conn, current["id"])
     leaders = repo.leaderboard(conn, current["id"])
@@ -152,9 +154,11 @@ def all_seasons_page():
             key = roster_team["slug"]
             item = team_data.setdefault(key, {
                 "slug": key, "name": roster_team["name"],
-                "series_count": 0, "roster_ids": set(), "games": []
+                "series_count": 0, "roster_ids": set(), "games": [],
+                "team_season_ids": []
             })
             item["series_count"] += len(repo.team_series(conn, roster_team["id"]))
+            item["team_season_ids"].append(roster_team["id"])
             item["roster_ids"].update(
                 member["id"] for member in repo.roster(conn, roster_team["id"])
             )
@@ -186,6 +190,7 @@ def all_seasons_page():
         item["averages"] = repo.aggregate_games(item["games"])
         item["records"] = repo.records_for_games(item["games"])
         item["roster"] = [{"id": pid} for pid in item["roster_ids"]]
+        item["competitions"] = repo.team_competitions(conn, item["team_season_ids"])
         team_list.append(item)
 
     # Exactly one player row across all seasons, including substitutes.
@@ -352,6 +357,7 @@ def all_seasons_team_page(team_slug):
         periods=periods, team=historical_team,
         averages=repo.aggregate_games(games),
         season_records=_combined_team_records(season_records),
+        competitions=repo.team_competitions(conn, team_season_ids),
         records=repo.records_for_games(games), members=members,
         series_list=_team_series_with_activity(conn, results), games_imported=len(games),
         team_individual_records=repo.individual_records(
@@ -378,6 +384,7 @@ def team_page(season_slug, team_slug):
         "team.html", active_page="seasons", season=current, team=team,
         averages=repo.aggregate_games(games),
         season_records=repo.team_season_records(conn, team["id"]),
+        competitions=repo.team_competitions(conn, [team["id"]]),
         records=repo.records_for_games(games), members=members,
         series_list=_team_series_with_activity(conn, repo.team_series(conn, team["id"])),
         team_individual_records=repo.individual_records(

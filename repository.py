@@ -101,17 +101,67 @@ def roster(conn, team_season_id):
     """, (team_season_id,)))
 
 
+def team_competitions(conn, team_season_ids):
+    """All competitions a roster actually entered, with its season-specific division.
+
+    One division/tier label per (team-season, competition). A NULL division
+    means no verified placement has been recorded; never infer one.
+    """
+    ids = sorted(set(int(i) for i in team_season_ids))
+    if not ids:
+        return []
+    marks = ",".join("?" for _ in ids)
+    return rows(conn.execute(f"""
+        SELECT ts.id AS team_season_id, sn.slug AS season_slug,
+               sn.name AS season_name, t.slug AS team_slug,
+               c.id AS competition_id, c.slug AS competition_slug,
+               c.name AS competition, d.division AS division,
+               COUNT(sr.id) AS series_count
+        FROM series sr
+        JOIN team_seasons ts ON ts.id=sr.team_season_id
+        JOIN seasons sn ON sn.id=ts.season_id
+        JOIN teams t ON t.id=ts.team_id
+        JOIN competitions c ON c.id=sr.competition_id
+        LEFT JOIN team_competition_divisions d
+          ON d.team_season_id=ts.id AND d.competition_id=c.id
+        WHERE sr.team_season_id IN ({marks})
+        GROUP BY ts.id, c.id
+        ORDER BY substr(sn.slug, -4) DESC,
+                 CASE WHEN sn.slug LIKE 'fall-%' THEN 3
+                      WHEN sn.slug LIKE 'summer-%' THEN 2
+                      WHEN sn.slug LIKE 'spring-%' THEN 1 ELSE 0 END DESC,
+                 CASE c.slug WHEN 'necc' THEN 0 WHEN 'ccs' THEN 1
+                             WHEN 'crl' THEN 2 WHEN 'pcl' THEN 3 ELSE 4 END,
+                 c.name
+    """, ids))
+
+
+def division_for_series(conn, series_id):
+    """Division/tier registered for this specific series' team and season."""
+    row = conn.execute("""
+        SELECT d.division
+        FROM series sr
+        LEFT JOIN team_competition_divisions d
+          ON d.team_season_id=sr.team_season_id AND d.competition_id=sr.competition_id
+        WHERE sr.id=?
+    """, (series_id,)).fetchone()
+    return row["division"] if row else None
+
+
 def team_series(conn, team_season_id):
     return rows(conn.execute("""
         SELECT sr.id, sr.played_on, sr.round_label, sr.result,
                sr.official_games_won, sr.official_games_lost,
                sr.ballchasing_group_url, sr.notes,
                o.name AS opponent, c.name AS competition,
+               d.division AS division,
                (SELECT COUNT(*) FROM games g
                 WHERE g.series_id=sr.id AND g.status='played') AS games_played
         FROM series sr
         JOIN opponents o ON o.id=sr.opponent_id
         JOIN competitions c ON c.id=sr.competition_id
+        LEFT JOIN team_competition_divisions d
+          ON d.team_season_id=sr.team_season_id AND d.competition_id=sr.competition_id
         WHERE sr.team_season_id=?
         ORDER BY sr.played_on DESC, sr.id DESC
     """, (team_season_id,)))
@@ -126,6 +176,7 @@ def team_season_records(conn, team_season_id):
     """
     series_rows = rows(conn.execute("""
         SELECT c.name AS competition, c.slug AS competition_slug,
+               d.division AS division,
                sr.result, sr.official_games_won, sr.official_games_lost,
                (SELECT COUNT(*) FROM games g
                 WHERE g.series_id=sr.id AND g.status='played'
@@ -139,13 +190,16 @@ def team_season_records(conn, team_season_id):
                 WHERE g.series_id=sr.id AND g.status='forfeit_loss') AS forfeit_losses
         FROM series sr
         JOIN competitions c ON c.id=sr.competition_id
+        LEFT JOIN team_competition_divisions d
+          ON d.team_season_id=sr.team_season_id AND d.competition_id=sr.competition_id
         WHERE sr.team_season_id=?
         ORDER BY sr.played_on, sr.id
     """, (team_season_id,)))
 
-    def empty_stats(name=None):
+    def empty_stats(name=None, division=None):
         return {
-            "competition": name, "series": 0, "wins": 0, "losses": 0,
+            "competition": name, "division": division,
+            "series": 0, "wins": 0, "losses": 0,
             "ties": 0, "official_wins": 0, "official_losses": 0,
             "played_wins": 0, "played_losses": 0,
             "forfeit_wins": 0, "forfeit_losses": 0,
@@ -155,7 +209,9 @@ def team_season_records(conn, team_season_id):
     by_competition = {}
     for game_series in series_rows:
         key = game_series["competition_slug"]
-        group = by_competition.setdefault(key, empty_stats(game_series["competition"]))
+        group = by_competition.setdefault(
+            key, empty_stats(game_series["competition"], game_series["division"])
+        )
         for stat in (total, group):
             stat["series"] += 1
             if game_series["result"] == "W": stat["wins"] += 1

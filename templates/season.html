@@ -1,36 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{{ season.name }} · SHSU RL Records{% endblock %}
 {% block content %}
-<style>
-  /* Season Player Stats: safely scoped to this page. */
-  .historical-record { margin:5px 0 9px; }
-  .historical-record .record-season-label { display:block; margin:0 0 2px; color:var(--muted); font-size:11px; font-weight:750; }
-  .historical-record .holder-line { margin:0; }
-  .player-stats-controls { display:flex; flex-wrap:wrap; gap:14px; margin:0 0 13px; }
-  .player-stats-controls label { display:flex; flex-direction:column; gap:5px; color:var(--muted); font-size:11px; font-weight:750; }
-  .player-stats-controls select { min-width:140px; max-width:100%; padding:9px 12px; color:var(--text); border:1px solid var(--line); border-radius:9px; background:var(--panel-2); font:inherit; font-size:12px; cursor:pointer; }
-  .player-stats-description { margin-bottom:14px; }
-  .season-player-stats-table { min-width:1200px; }
-  .season-player-stats-table th:not(:first-child):not(:nth-child(2)),
-  .season-player-stats-table td:not(:first-child):not(:nth-child(2)) { text-align:right; font-variant-numeric:tabular-nums; }
-  .season-player-stats-table td:nth-child(1) { white-space:nowrap; }
-  .season-player-stats-table td:nth-child(2) { min-width:105px; }
-  .season-player-stats-table td:last-child { color:var(--orange-strong); font-weight:750; }
-  .season-player-stats-table tr[hidden] { display:none !important; }
-  .season-player-stats-table .player-stats-sort-button {
-    appearance:none; display:inline-flex; align-items:center; gap:6px;
-    width:100%; padding:0; background:transparent; border:0; border-radius:0;
-    color:inherit; font:inherit; font-weight:inherit; font-size:inherit;
-    text-transform:inherit; letter-spacing:inherit; text-align:inherit;
-    cursor:pointer; white-space:nowrap;
-  }
-  .season-player-stats-table th:not(:first-child):not(:nth-child(2)) .player-stats-sort-button { justify-content:flex-end; }
-  .season-player-stats-table .player-stats-sort-button:hover,
-  .season-player-stats-table .player-stats-sort-button:focus-visible,
-  .season-player-stats-table th[aria-sort="ascending"] .player-stats-sort-button,
-  .season-player-stats-table th[aria-sort="descending"] .player-stats-sort-button { color:var(--orange-strong); }
-  .season-player-stats-table .player-stats-sort-arrow { display:inline-block; min-width:9px; font-size:8px; line-height:1; }
-</style>
 <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="{{ url_for('home') }}">Archive</a><span>/</span><span>{{ season.name }}</span></nav>
 <section class="page-hero compact-hero">
   <div class="eyebrow"><span class="eyebrow-dot"></span> {{ "ALL-SEASONS RECORD BOOK" if all_time|default(false) else "SEASON RECORD BOOK" }}</div>
@@ -63,6 +33,36 @@
         <div class="team-tile-top"><span class="team-bullet"></span><span class="muted small">SHSU / {{ team.slug | upper }}</span><span class="tile-arrow">↗</span></div>
         <h3>{{ team.slug | capitalize }}</h3>
         <p>{{ team.roster|length }} {{ "historical players" if all_time|default(false) else "rostered players" }} · {{ team.series_count }} recorded series</p>
+        {% if team.competitions %}
+          <div class="team-tile-competitions" aria-label="Competitions and divisions">
+
+          {% if all_time|default(false) %}
+
+            {% for season_name, entries in team.competitions|groupby('season_name') %}
+            <div class="team-tile-competition-row">
+              <span class="muted">{{ season_name }}:</span>
+
+              {% for entry in entries %}
+                {% if not loop.first %} <span class="muted"> | </span> {% endif %}
+                <strong>{{ entry.competition }}</strong>
+                {% if entry.division %} · {{ entry.division }}{% endif %}
+              {% endfor %}
+            </div>
+            {% endfor %}
+
+          {% else %}
+
+            <div class="team-tile-competition-row">
+              {% for entry in team.competitions %}
+                {% if not loop.first %} <span class="muted"> | </span> {% endif %}
+                <strong>{{ entry.competition }}</strong>
+                {% if entry.division %} · {{ entry.division }}{% endif %}
+              {% endfor %}
+            </div>
+
+          {% endif %}
+        </div>
+        {% endif %}
         <div class="tile-metric">{% if team.averages %}<strong>{{ "%.2f"|format(team.averages.goals) }}</strong><span>Goals / game</span>{% else %}<strong>—</strong><span>No game stats imported</span>{% endif %}</div>
       </a>
       {% endfor %}
@@ -98,8 +98,6 @@
     </div>
   </div>
 
-  
-
   <div class="tab-panel" id="panel-individuals" role="tabpanel" aria-labelledby="tab-individuals" data-panel="individuals" hidden>
 
     <div class="subsection-heading"><h3>All SHSU individual records</h3><p>Highest individual game statistics across all rosters{% if all_time|default(false) %} and recorded seasons{% endif %}, including ties.</p></div>
@@ -114,7 +112,6 @@
     {% else %}
       <div class="empty-state"><span class="empty-icon">🎯</span><h3>No individual game records yet</h3><p>These records will populate directly from the player-game statistics table.</p></div>
     {% endif %}
-
 
     <div class="subsection-heading"><h3>Highest single game score by player</h3><p>Each player's highest recorded scoreboard score {{ "across all recorded seasons" if all_time|default(false) else "this season" }}.</p></div>
     {% if personal_bests %}
@@ -131,7 +128,6 @@
       <div class="empty-state"><span class="empty-icon">🎯</span><h3>Player bests aren't imported yet</h3><p>Once replay stats are loaded, every player will have a personal best automatically.</p></div>
     {% endif %}
 
-    
   </div>
 
   <div class="tab-panel" id="panel-standouts" role="tabpanel" aria-labelledby="tab-standouts" data-panel="standouts" hidden>
@@ -151,10 +147,19 @@
               {% endif %}
             {% endfor %}
 
-          <details class="inline-details"><summary>{{ category_counter.count }} / 9 categories <span>⌄</span></summary><div class="accolade-popover">
+          <details class="inline-details"><summary>
+            {% if category_counter.count > 0 %}
+              <span class="{{ 'categories-complete' if category_counter.count == 9 else 'muted' }}">
+              {{ category_counter.count }} / {{ standout_types|length }} categories
+              </span>
+            {% else %}
+              <span class="muted">No accolades</span>
+            {% endif %}</summary>
+          
+          <div class="accolade-popover">
           {% for cat in standout_types %}<div><span>{{ cat.icon }} {{ cat.label }}</span><span class="{% if p[cat.field]|int == 0 %}category-zero{% endif %}"><strong>{{ p[cat.field] }}</strong></span></div>{% endfor %}
           </div></details></td></tr>
-      {% endfor %}</tbody>
+        {% endfor %}</tbody>
     </table></div>
     {% if appearances == 0 %}<div class="notice">Player profiles and roster assignments are live. Standout counts will appear once you import replay statistics.</div>{% endif %}
     <div class="subsection-heading"><h3>What qualifies as a standout?</h3><p>Each player-game can earn multiple categories, but only one standout game.</p></div>

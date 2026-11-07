@@ -38,6 +38,13 @@ CREATE TABLE IF NOT EXISTS roster_memberships (
 CREATE TABLE IF NOT EXISTS competitions (
  id INTEGER PRIMARY KEY, slug TEXT NOT NULL UNIQUE, name TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS team_competition_divisions (
+    team_season_id INTEGER NOT NULL REFERENCES team_seasons(id) ON DELETE CASCADE,
+    competition_id INTEGER NOT NULL REFERENCES competitions(id),
+    division TEXT NOT NULL CHECK (length(trim(division)) > 0),
+    PRIMARY KEY (team_season_id, competition_id)
+);
+
 CREATE TABLE IF NOT EXISTS opponents (
  id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE
 );

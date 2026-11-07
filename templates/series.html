@@ -9,7 +9,8 @@
 </nav>
 
 <section class="page-hero compact-hero series-hero">
-  <div class="eyebrow"><span class="eyebrow-dot"></span> {{ series.season_name | upper }} / {{ series.competition | upper }} / SERIES RECAP</div>
+  {% set season_division = division_for_series(series.id) %}
+  <div class="eyebrow"><span class="eyebrow-dot"></span> {{ series.season_name | upper }} / {{ series.competition | upper }}{% if season_division %} / {{ season_division | upper }}{% endif %} / SERIES RECAP</div>
   <div class="page-hero-row">
     <div>
       <h1>{{ series.title }}<span class="accent">.</span></h1>
