@@ -44,7 +44,6 @@ CREATE TABLE IF NOT EXISTS team_competition_divisions (
     division TEXT NOT NULL CHECK (length(trim(division)) > 0),
     PRIMARY KEY (team_season_id, competition_id)
 );
-
 CREATE TABLE IF NOT EXISTS opponents (
  id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE
 );
