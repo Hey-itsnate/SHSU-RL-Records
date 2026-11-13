@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Preview (default) or commit a game highlight and featured SHSU players.
 
+Real Example:
+    python scripts/import_highlight.py --series-title "NECC Placements - Orange vs UNM Esports (1-1)" --game-number 3 --title "BBL Double" --url "https://medal.tv/games/rocket-league/clips/nAv4BBHHf6k0YNC70?invite=cr-MSw1bHAsMjY5NTE1NDg" --players "Nyx" 
+
+
 Examples:
   python scripts/import_highlight.py --game-id 42 --title "Zero-second save" \
     --url "https://www.youtube.com/watch?v=..." --players "Nyx,Coldest"
@@ -10,8 +14,6 @@ Examples:
     --title "Team play" --url "https://youtu.be/..." --players "Nyx,Tango"
 Run from project root. No writes unless --commit.
 
-Real Example:
-    python scripts/import_highlight.py --series-title "NECC Placements - Orange vs UNM Esports (1-1)" --game-number 3 --title "BBL Double" --url "https://medal.tv/games/rocket-league/clips/nAv4BBHHf6k0YNC70?invite=cr-MSw1bHAsMjY5NTE1NDg" --players "Nyx" --commit
 """
 from __future__ import annotations
 
